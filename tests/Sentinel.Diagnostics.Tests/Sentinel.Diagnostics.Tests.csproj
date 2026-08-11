@@ -22,11 +22,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Sentinel.Diagnostics.Core\Sentinel.Diagnostics.Core.csproj" />
-    <ProjectReference Include="..\Sentinel.Diagnostics.Policies\Sentinel.Diagnostics.Policies.csproj" />
-    <ProjectReference Include="..\Sentinel.Diagnostics.Retry\Sentinel.Diagnostics.Retry.csproj" />
-    <ProjectReference Include="..\Sentinel.Diagnostics.OTel\Sentinel.Diagnostics.OTel.csproj" />
-    <ProjectReference Include="..\Sentinel.Diagnostics.Generator\Sentinel.Diagnostics.Generator.csproj" />
+    <ProjectReference Include="..\..\src\Sentinel.Diagnostics.Core\Sentinel.Diagnostics.Core.csproj" />
+    <ProjectReference Include="..\..\src\Sentinel.Diagnostics.Policies\Sentinel.Diagnostics.Policies.csproj" />
+    <ProjectReference Include="..\..\src\Sentinel.Diagnostics.Retry\Sentinel.Diagnostics.Retry.csproj" />
+    <ProjectReference Include="..\..\src\Sentinel.Diagnostics.OTel\Sentinel.Diagnostics.OTel.csproj" />
+    <ProjectReference Include="..\..\src\Sentinel.Diagnostics.Generator\Sentinel.Diagnostics.Generator.csproj" />
   </ItemGroup>
 
 </Project>

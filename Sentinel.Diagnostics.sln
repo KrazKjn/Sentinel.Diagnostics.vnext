@@ -3,21 +3,26 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sentinel.Diagnostics.Core", "Sentinel.Diagnostics.Core\Sentinel.Diagnostics.Core.csproj", "{05AF701E-EF1B-4C22-BA9E-B8C35B5E2CC3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sentinel.Diagnostics.Core", "src\Sentinel.Diagnostics.Core\Sentinel.Diagnostics.Core.csproj", "{05AF701E-EF1B-4C22-BA9E-B8C35B5E2CC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sentinel.Diagnostics.Policies", "Sentinel.Diagnostics.Policies\Sentinel.Diagnostics.Policies.csproj", "{C7F3C624-7F7D-4985-AF4D-562A18F7160C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sentinel.Diagnostics.Policies", "src\Sentinel.Diagnostics.Policies\Sentinel.Diagnostics.Policies.csproj", "{C7F3C624-7F7D-4985-AF4D-562A18F7160C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sentinel.Diagnostics.Retry", "Sentinel.Diagnostics.Retry\Sentinel.Diagnostics.Retry.csproj", "{D97853D8-2523-4B90-A7A1-7788A145130A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sentinel.Diagnostics.Retry", "src\Sentinel.Diagnostics.Retry\Sentinel.Diagnostics.Retry.csproj", "{D97853D8-2523-4B90-A7A1-7788A145130A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sentinel.Diagnostics.OTel", "Sentinel.Diagnostics.OTel\Sentinel.Diagnostics.OTel.csproj", "{88DEEB6B-BED4-42CD-99E6-79A608CEA9E5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sentinel.Diagnostics.OTel", "src\Sentinel.Diagnostics.OTel\Sentinel.Diagnostics.OTel.csproj", "{88DEEB6B-BED4-42CD-99E6-79A608CEA9E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sentinel.Diagnostics.Generator", "Sentinel.Diagnostics.Generator\Sentinel.Diagnostics.Generator.csproj", "{E7E94274-ABC0-4211-B284-426AE80F637B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sentinel.Diagnostics.Generator", "src\Sentinel.Diagnostics.Generator\Sentinel.Diagnostics.Generator.csproj", "{E7E94274-ABC0-4211-B284-426AE80F637B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sentinel.Diagnostics.Tests", "Sentinel.Diagnostics.Tests\Sentinel.Diagnostics.Tests.csproj", "{1AC69E8D-DB15-44EC-8C8A-1ACF78ADBD73}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sentinel.Diagnostics.Tests", "tests\Sentinel.Diagnostics.Tests\Sentinel.Diagnostics.Tests.csproj", "{1AC69E8D-DB15-44EC-8C8A-1ACF78ADBD73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sentinel.Diagnostics.Instrumentation", "Sentinel.Diagnostics.Instrumentation\Sentinel.Diagnostics.Instrumentation.csproj", "{DE516098-D5C9-C5EA-5526-1E1D42D779BF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sentinel.Diagnostics.Instrumentation", "src\Sentinel.Diagnostics.Instrumentation\Sentinel.Diagnostics.Instrumentation.csproj", "{DE516098-D5C9-C5EA-5526-1E1D42D779BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sentinel.Diagnostics.Cli", "Sentinel.Diagnostics.Cli\Sentinel.Diagnostics.Cli.csproj", "{3DB229A9-A264-A3EB-6064-70BFB8A31EC1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sentinel.Diagnostics.Cli", "src\Sentinel.Diagnostics.Cli\Sentinel.Diagnostics.Cli.csproj", "{3DB229A9-A264-A3EB-6064-70BFB8A31EC1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

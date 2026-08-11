@@ -1,37 +1,31 @@
 ﻿using Sentinel.Diagnostics.Generator.Compatibility;
 using Sentinel.Diagnostics.Generator.Metadata;
-using System;
 using System.Collections.Immutable;
 
 namespace Sentinel.Diagnostics.Generator.Builders;
 
 /// <summary>
-/// Converts raw metadata produced by the Metadata Analyzer into finalized
-/// metadata used by the Sentinel Diagnostics source emitters.
+/// Transforms raw semantic metadata produced by <see cref="MetadataAnalyzer"/>
+/// into finalized generator-side metadata consumed by the vNext
+/// Instrumentation Engine.
 ///
 /// The Metadata Builder performs transformation only. It does not:
 /// - Perform semantic analysis.
 /// - Access Roslyn syntax nodes or symbols.
 /// - Resolve System.Type instances.
 /// - Generate source code.
-/// - Generate wrappers.
 /// - Generate policies.
+/// - Reconstruct type declarations.
 ///
-/// Type information remains represented as fully qualified type-name strings.
-/// The emitters are responsible for converting those names into generated
-/// C# expressions such as typeof(global::MyApplication.Customer).
+/// All type information remains represented as fully qualified type-name
+/// strings because the generator operates at compile time and does not use
+/// runtime reflection.
 /// </summary>
 public sealed class MetadataBuilder
 {
     /// <summary>
     /// Builds finalized generation metadata from raw analyzer metadata.
     /// </summary>
-    /// <param name="rawMetadata">
-    /// Raw metadata produced by the Metadata Analyzer.
-    /// </param>
-    /// <returns>
-    /// Finalized metadata consumed by the source emitters.
-    /// </returns>
     public static SentinelMethodGenerationMetadata Build(
         RawMethodMetadata rawMetadata)
     {
@@ -44,18 +38,22 @@ public sealed class MetadataBuilder
 
             DeclaringNamespace: rawMetadata.DeclaringNamespace,
             DeclaringTypeName: rawMetadata.DeclaringTypeName,
-            FullyQualifiedDeclaringTypeName:
-                rawMetadata.FullyQualifiedDeclaringTypeName,
+            FullyQualifiedDeclaringTypeName: rawMetadata.FullyQualifiedDeclaringTypeName,
 
             ContainingTypes: rawMetadata.ContainingTypes,
             Parameters: BuildParameters(rawMetadata.Parameters),
 
-            ReturnType: rawMetadata.ReturnType,
+            ReturnTypeName: rawMetadata.ReturnTypeName,
+            FullyQualifiedReturnTypeName: rawMetadata.FullyQualifiedReturnTypeName,
+
             SpanName: rawMetadata.SpanName,
             PolicyName: rawMetadata.PolicyName,
 
             IsAsync: rawMetadata.IsAsync,
+            IsIterator: rawMetadata.IsIterator,
             IsStatic: rawMetadata.IsStatic,
+            IsGenericMethod: rawMetadata.IsGenericMethod,
+            GenericTypeParameters: rawMetadata.GenericTypeParameters,
             HasCancellationToken: rawMetadata.HasCancellationToken,
 
             MethodAccessibility: rawMetadata.MethodAccessibility,
@@ -65,9 +63,8 @@ public sealed class MetadataBuilder
     /// <summary>
     /// Converts raw parameter metadata into finalized generation metadata.
     /// </summary>
-    private static ImmutableArray<SentinelParameterGenerationMetadata>
-        BuildParameters(
-            ImmutableArray<RawParameterMetadata> rawParameters)
+    private static ImmutableArray<SentinelParameterGenerationMetadata> BuildParameters(
+        ImmutableArray<RawParameterMetadata> rawParameters)
     {
         if (rawParameters.IsDefaultOrEmpty)
         {
@@ -83,15 +80,15 @@ public sealed class MetadataBuilder
             builder.Add(
                 new SentinelParameterGenerationMetadata(
                     Name: parameter.Name,
-                    ParameterType: parameter.ParameterType,
-                    IsSensitive: parameter.IsSensitive,
-                    ShouldLog: parameter.ShouldLog,
+                    TypeName: parameter.TypeName,
+                    FullyQualifiedTypeName: parameter.FullyQualifiedTypeName,
                     RefKind: parameter.RefKind,
                     IsParams: parameter.IsParams,
-                    HasExplicitDefaultValue:
-                        parameter.HasExplicitDefaultValue,
-                    DefaultValueExpression:
-                        parameter.DefaultValueExpression));
+                    IsNullable: parameter.IsNullable,
+                    IsSensitive: parameter.IsSensitive,
+                    ShouldLog: parameter.ShouldLog,
+                    HasExplicitDefaultValue: parameter.HasExplicitDefaultValue,
+                    DefaultValueExpression: parameter.DefaultValueExpression));
         }
 
         return builder.ToImmutable();

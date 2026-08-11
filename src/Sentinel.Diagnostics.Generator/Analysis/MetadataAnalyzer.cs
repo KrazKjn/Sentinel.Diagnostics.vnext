@@ -58,11 +58,17 @@ internal sealed class MetadataAnalyzer(Compilation compilation)
             methodSymbol.ToDisplayString(
                 SymbolDisplayFormat.FullyQualifiedFormat);
 
-        string returnType =
+        string returnTypeName =
+            methodSymbol.ReturnType.ToDisplayString(
+                SymbolDisplayFormat.MinimallyQualifiedFormat);
+
+        string? fullyQualifiedReturnTypeName =
             methodSymbol.ReturnType.ToDisplayString(
                 SymbolDisplayFormat.FullyQualifiedFormat);
 
         bool isAsync = methodSymbol.IsAsync;
+
+        bool isIterator = IsIteratorMethod(methodDeclaration);
 
         bool isStatic = methodSymbol.IsStatic;
 
@@ -101,13 +107,19 @@ internal sealed class MetadataAnalyzer(Compilation compilation)
                 fullyQualifiedDeclaringTypeName,
             ContainingTypes: containingTypes,
 
-            ReturnType: returnType,
+            ReturnTypeName: returnTypeName,
+            FullyQualifiedReturnTypeName: fullyQualifiedReturnTypeName,
             SpanName: spanName,
             PolicyName: autoLog.Policy,
 
             IsAsync: isAsync,
+            IsIterator: isIterator,
             IsStatic: isStatic,
             HasCancellationToken: hasCancellationToken,
+            IsGenericMethod: methodSymbol.IsGenericMethod,
+            GenericTypeParameters: methodSymbol.TypeParameters
+                .Select(static parameter => parameter.Name)
+                .ToImmutableArray(),
 
             Parameters: parameters,
 
@@ -130,6 +142,10 @@ internal sealed class MetadataAnalyzer(Compilation compilation)
         {
             string parameterType =
                 parameter.Type.ToDisplayString(
+                    SymbolDisplayFormat.MinimallyQualifiedFormat);
+
+            string? fullyQualifiedParameterType =
+                parameter.Type.ToDisplayString(
                     SymbolDisplayFormat.FullyQualifiedFormat);
 
             bool isSensitive =
@@ -149,15 +165,15 @@ internal sealed class MetadataAnalyzer(Compilation compilation)
             builder.Add(
                 new RawParameterMetadata(
                     Name: parameter.Name,
-                    ParameterType: parameterType,
-                    IsSensitive: isSensitive,
-                    ShouldLog: shouldLog,
+                    TypeName: parameterType,
+                    FullyQualifiedTypeName: fullyQualifiedParameterType,
                     RefKind: parameter.RefKind,
                     IsParams: parameter.IsParams,
-                    HasExplicitDefaultValue:
-                        parameter.HasExplicitDefaultValue,
-                    DefaultValueExpression:
-                        defaultValueExpression));
+                    IsNullable: parameter.NullableAnnotation == NullableAnnotation.Annotated,
+                    IsSensitive: isSensitive,
+                    ShouldLog: shouldLog,
+                    HasExplicitDefaultValue: parameter.HasExplicitDefaultValue,
+                    DefaultValueExpression: defaultValueExpression));
         }
 
         return builder.ToImmutable();
@@ -326,167 +342,43 @@ internal sealed class MetadataAnalyzer(Compilation compilation)
             : null;
     }
 
-    private static bool IsPartialType(INamedTypeSymbol typeSymbol)
+    private static bool IsIteratorMethod(MethodDeclarationSyntax method)
     {
-        foreach (SyntaxReference syntaxReference
-                 in typeSymbol.DeclaringSyntaxReferences)
-        {
-            if (syntaxReference.GetSyntax()
-                is TypeDeclarationSyntax typeDeclaration)
-            {
-                if (typeDeclaration.Modifiers.Any(
-                        SyntaxKind.PartialKeyword))
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return method.Body?.DescendantNodes().Any(
+            n => n is YieldStatementSyntax) ?? false;
     }
 
-    private static ImmutableArray<ContainingTypeMetadata>
-        BuildContainingTypeMetadata(
-            INamedTypeSymbol declaringType)
+    private static ImmutableArray<ContainingTypeMetadata> BuildContainingTypeMetadata(
+        INamedTypeSymbol declaringType)
     {
-        var types =
-            ImmutableArray.CreateBuilder<
-                ContainingTypeMetadata>();
+        var types = ImmutableArray.CreateBuilder<ContainingTypeMetadata>();
 
-        INamedTypeSymbol? current =
-            declaringType;
+        INamedTypeSymbol? current = declaringType;
 
         while (current is not null)
         {
-            types.Insert(
-                0,
-                CreateContainingTypeMetadata(current));
-
-            current =
-                current.ContainingType;
+            types.Insert(0, CreateContainingTypeMetadata(current));
+            current = current.ContainingType;
         }
 
         return types.ToImmutable();
     }
 
-    private static ContainingTypeMetadata
-        CreateContainingTypeMetadata(
-            INamedTypeSymbol typeSymbol)
+    private static ContainingTypeMetadata CreateContainingTypeMetadata(
+        INamedTypeSymbol typeSymbol)
     {
         ImmutableArray<string> typeParameters =
             typeSymbol.TypeParameters
                 .Select(static parameter => parameter.Name)
                 .ToImmutableArray();
 
-        ImmutableArray<string> constraints =
-            BuildTypeParameterConstraints(typeSymbol);
-
-        bool isStatic =
-            typeSymbol.IsStatic;
-
-        bool isReadOnly =
-            typeSymbol.IsReadOnly;
-
-        bool isRecord =
-            typeSymbol.IsRecord;
-
-        bool isPartial =
-            IsPartialType(typeSymbol);
-
         return new ContainingTypeMetadata(
-            Name:
-                typeSymbol.Name,
-
-            FullyQualifiedName:
-                typeSymbol.ToDisplayString(
-                    SymbolDisplayFormat.FullyQualifiedFormat),
-
-            Namespace:
-                typeSymbol.ContainingNamespace?
-                    .ToDisplayString() ?? string.Empty,
-
-            Accessibility:
-                typeSymbol.DeclaredAccessibility,
-
-            TypeKind:
-                typeSymbol.TypeKind,
-
-            IsPartial:
-                isPartial,
-
-            IsStatic:
-                isStatic,
-
-            IsReadOnly:
-                isReadOnly,
-
-            IsRecord:
-                isRecord,
-
-            TypeParameters:
-                typeParameters,
-
-            TypeParameterConstraints:
-                constraints);
-    }
-
-    private static ImmutableArray<string>
-        BuildTypeParameterConstraints(
-            INamedTypeSymbol typeSymbol)
-    {
-        var builder =
-            ImmutableArray.CreateBuilder<string>();
-
-        foreach (ITypeParameterSymbol parameter
-                 in typeSymbol.TypeParameters)
-        {
-            var constraints =
-                new List<string>();
-
-            if (parameter.HasReferenceTypeConstraint)
-            {
-                constraints.Add("class");
-            }
-
-            if (parameter.HasValueTypeConstraint)
-            {
-                constraints.Add("struct");
-            }
-
-            if (parameter.HasUnmanagedTypeConstraint)
-            {
-                constraints.Add("unmanaged");
-            }
-
-            if (parameter.HasNotNullConstraint)
-            {
-                constraints.Add("notnull");
-            }
-
-            foreach (ITypeSymbol constraint
-                     in parameter.ConstraintTypes)
-            {
-                constraints.Add(
-                    constraint.ToDisplayString(
-                        SymbolDisplayFormat.FullyQualifiedFormat));
-            }
-
-            if (parameter.HasConstructorConstraint)
-            {
-                constraints.Add("new()");
-            }
-
-            if (constraints.Count == 0)
-            {
-                builder.Add(string.Empty);
-                continue;
-            }
-
-            builder.Add(
-                $"where {parameter.Name} : " +
-                string.Join(", ", constraints));
-        }
-
-        return builder.ToImmutable();
+            Name: typeSymbol.Name,
+            FullyQualifiedName: typeSymbol.ToDisplayString(
+                SymbolDisplayFormat.FullyQualifiedFormat),
+            Namespace: typeSymbol.ContainingNamespace?.ToDisplayString() ?? string.Empty,
+            Accessibility: typeSymbol.DeclaredAccessibility,
+            TypeKind: typeSymbol.TypeKind,
+            TypeParameters: typeParameters);
     }
 }

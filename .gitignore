@@ -6,3 +6,4 @@ TestResults/
 *.suo
 *.cache
 *.log
+*.old

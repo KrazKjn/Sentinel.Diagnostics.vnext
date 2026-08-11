@@ -1,0 +1,87 @@
+﻿using System.Collections.Immutable;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+
+namespace Sentinel.Diagnostics.Generator;
+
+/// <summary>
+/// Collects method declarations decorated with the [AutoLog] attribute.
+///
+/// This class performs syntax-only filtering. It does not perform semantic
+/// analysis, resolve symbols, or inspect attribute arguments.
+///
+/// The collected methods can subsequently be passed through a SemanticModel
+/// for metadata extraction by the incremental generator pipeline.
+/// </summary>
+public sealed class AutoLogSyntaxReceiver
+{
+    private readonly ImmutableArray<MethodDeclarationSyntax>.Builder _methods =
+        ImmutableArray.CreateBuilder<MethodDeclarationSyntax>();
+
+    /// <summary>
+    /// Gets the method declarations identified as having the [AutoLog] attribute.
+    /// </summary>
+    public ImmutableArray<MethodDeclarationSyntax> Methods =>
+        _methods.ToImmutable();
+
+    /// <summary>
+    /// Examines a syntax node and collects it when it is a method declaration
+    /// containing an [AutoLog] attribute.
+    ///
+    /// No semantic analysis is performed.
+    /// </summary>
+    /// <param name="node">The syntax node to examine.</param>
+    public void OnVisitSyntaxNode(SyntaxNode node)
+    {
+        if (node is not MethodDeclarationSyntax method)
+            return;
+
+        if (method.AttributeLists.Count == 0)
+            return;
+
+        if (HasAutoLogAttribute(method))
+        {
+            _methods.Add(method);
+        }
+    }
+
+    /// <summary>
+    /// Performs syntax-only detection of the [AutoLog] attribute.
+    ///
+    /// Both [AutoLog] and [AutoLogAttribute] forms are recognized.
+    /// Qualified attribute names are intentionally not resolved semantically.
+    /// </summary>
+    private static bool HasAutoLogAttribute(
+        MethodDeclarationSyntax method)
+    {
+        if (method.AttributeLists.Count == 0)
+            return false;
+
+        foreach (AttributeListSyntax attributeList in method.AttributeLists)
+        {
+            foreach (AttributeSyntax attribute in attributeList.Attributes)
+            {
+                string? attributeName = attribute.Name switch
+                {
+                    IdentifierNameSyntax identifier =>
+                        identifier.Identifier.ValueText,
+
+                    QualifiedNameSyntax qualified =>
+                        qualified.Right.Identifier.ValueText,
+
+                    AliasQualifiedNameSyntax aliasQualified =>
+                        aliasQualified.Name.Identifier.ValueText,
+
+                    _ => null
+                };
+
+                if (attributeName is "AutoLog" or "AutoLogAttribute")
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+}

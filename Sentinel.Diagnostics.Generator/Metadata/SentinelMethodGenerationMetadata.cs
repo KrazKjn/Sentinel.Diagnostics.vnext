@@ -22,7 +22,7 @@ public sealed record SentinelMethodGenerationMetadata(
     string DeclaringNamespace,
     string DeclaringTypeName,
     string FullyQualifiedDeclaringTypeName,
-    ImmutableArray<ContainingTypeGenerationMetadata> ContainingTypes,
+    ImmutableArray<ContainingTypeMetadata> ContainingTypes,
 
     // Method characteristics.
     string ReturnType,
@@ -31,7 +31,6 @@ public sealed record SentinelMethodGenerationMetadata(
     bool IsAsync,
     bool IsStatic,
     bool HasCancellationToken,
-    bool IsDeclaringTypePartial,
 
     Accessibility MethodAccessibility,
     Accessibility DeclaringTypeAccessibility,

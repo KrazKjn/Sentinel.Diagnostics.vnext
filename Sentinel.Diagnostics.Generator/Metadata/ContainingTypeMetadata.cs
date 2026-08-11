@@ -10,7 +10,7 @@ namespace Sentinel.Diagnostics.Generator.Metadata;
 /// This is generator-side metadata and is not part of the Sentinel
 /// Diagnostics runtime metadata model.
 /// </summary>
-public sealed record ContainingTypeGenerationMetadata(
+public sealed record ContainingTypeMetadata(
     string Name,
     string FullyQualifiedName,
     string Namespace,

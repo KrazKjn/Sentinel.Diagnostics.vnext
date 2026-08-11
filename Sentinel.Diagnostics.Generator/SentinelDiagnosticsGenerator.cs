@@ -2,7 +2,7 @@
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Sentinel.Diagnostics.Generator.Analysis;
 using Sentinel.Diagnostics.Generator.Builders;
-using Sentinel.Diagnostics.Generator.Emitters;
+//using Sentinel.Diagnostics.Generator.Emitters;
 using Sentinel.Diagnostics.Generator.Metadata;
 using System;
 using System.Linq;
@@ -25,8 +25,7 @@ namespace Sentinel.Diagnostics.Generator;
 /// Metadata Building
 ///     ↓
 /// SentinelMethodGenerationMetadata
-///     ├──→ PolicyEmitter
-///     └──→ WrapperEmitter
+///     └──→ PolicyEmitter
 ///
 /// This class is responsible only for composing the incremental
 /// generator pipeline. Semantic analysis, metadata construction,
@@ -189,14 +188,14 @@ public sealed class SentinelDiagnosticsGenerator : IIncrementalGenerator
         // Diagnostics Infrastructure
         // =================================================================
 
-        context.RegisterSourceOutput(
-            methodMetadataProvider.Collect(),
-            static (productionContext, methods) =>
-            {
-                DiagnosticsEmitter.Emit(
-                    productionContext,
-                    methods);
-            });
+        //context.RegisterSourceOutput(
+        //    methodMetadataProvider.Collect(),
+        //    static (productionContext, methods) =>
+        //    {
+        //        DiagnosticsEmitter.Emit(
+        //            productionContext,
+        //            methods);
+        //    });
 
         /*
          * ================================================================
@@ -212,46 +211,13 @@ public sealed class SentinelDiagnosticsGenerator : IIncrementalGenerator
          * PolicyEmitter is responsible only for source generation.
          * It does not perform semantic analysis or metadata extraction.
          */
-        context.RegisterSourceOutput(
-            methodMetadataProvider.Collect(),
-            static (productionContext, methods) =>
-            {
-                PolicyEmitter.Emit(
-                    productionContext,
-                    methods);
-            });
-
-        /*
-         * ================================================================
-         * Stage 4c
-         * Wrapper Emission
-         * ================================================================
-         *
-         * WrapperEmitter processes each finalized method independently.
-         *
-         * It receives the completed metadata contract and is responsible
-         * only for generating the wrapper source code.
-         *
-         * WrapperEmitter uses:
-         *
-         * - IsStatic to determine static versus instance invocation
-         * - FullyQualifiedDeclaringTypeName for type references
-         * - RefKind for ref/out/in parameters
-         * - IsParams for params declarations
-         * - HasCancellationToken for token pass-through
-         * - IsAsync for async/await generation
-         * - ReturnType for return handling
-         * - IsSensitive and ShouldLog for parameter logging
-         * - PolicyName and SpanName for diagnostic behavior
-         */
-
         //context.RegisterSourceOutput(
-        //    methodMetadataProvider,
-        //    static (productionContext, methodMetadata) =>
+        //    methodMetadataProvider.Collect(),
+        //    static (productionContext, methods) =>
         //    {
-        //        WrapperEmitter.Emit(
+        //        PolicyEmitter.Emit(
         //            productionContext,
-        //            methodMetadata);
+        //            methods);
         //    });
     }
 

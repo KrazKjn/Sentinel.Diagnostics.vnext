@@ -49,7 +49,7 @@ internal static class MetadataValidator
         SourceProductionContext context,
         RawMethodMetadata metadata)
     {
-        foreach (ContainingTypeGenerationMetadata type
+        foreach (ContainingTypeMetadata type
                  in metadata.ContainingTypes)
         {
             if (type.IsPartial)

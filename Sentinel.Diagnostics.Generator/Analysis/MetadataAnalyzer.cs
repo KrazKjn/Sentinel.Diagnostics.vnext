@@ -48,7 +48,7 @@ internal sealed class MetadataAnalyzer(Compilation compilation)
             return null;
         }
 
-        ImmutableArray<ContainingTypeGenerationMetadata> containingTypes =
+        ImmutableArray<ContainingTypeMetadata> containingTypes =
             BuildContainingTypeMetadata(methodSymbol.ContainingType);
 
         ImmutableArray<RawParameterMetadata> parameters =
@@ -71,9 +71,6 @@ internal sealed class MetadataAnalyzer(Compilation compilation)
                 SymbolEqualityComparer.Default.Equals(
                     parameter.Type,
                     _cancellationTokenSymbol));
-
-        bool isDeclaringTypePartial =
-            IsPartialType(methodSymbol.ContainingType);
 
         // Namespace containing the declaring type.
         string declaringNamespace =
@@ -111,7 +108,6 @@ internal sealed class MetadataAnalyzer(Compilation compilation)
             IsAsync: isAsync,
             IsStatic: isStatic,
             HasCancellationToken: hasCancellationToken,
-            IsDeclaringTypePartial: isDeclaringTypePartial,
 
             Parameters: parameters,
 
@@ -349,13 +345,13 @@ internal sealed class MetadataAnalyzer(Compilation compilation)
         return false;
     }
 
-    private static ImmutableArray<ContainingTypeGenerationMetadata>
+    private static ImmutableArray<ContainingTypeMetadata>
         BuildContainingTypeMetadata(
             INamedTypeSymbol declaringType)
     {
         var types =
             ImmutableArray.CreateBuilder<
-                ContainingTypeGenerationMetadata>();
+                ContainingTypeMetadata>();
 
         INamedTypeSymbol? current =
             declaringType;
@@ -373,7 +369,7 @@ internal sealed class MetadataAnalyzer(Compilation compilation)
         return types.ToImmutable();
     }
 
-    private static ContainingTypeGenerationMetadata
+    private static ContainingTypeMetadata
         CreateContainingTypeMetadata(
             INamedTypeSymbol typeSymbol)
     {
@@ -397,7 +393,7 @@ internal sealed class MetadataAnalyzer(Compilation compilation)
         bool isPartial =
             IsPartialType(typeSymbol);
 
-        return new ContainingTypeGenerationMetadata(
+        return new ContainingTypeMetadata(
             Name:
                 typeSymbol.Name,
 

@@ -22,7 +22,7 @@ public sealed record RawMethodMetadata(
     string DeclaringTypeName,
     string FullyQualifiedDeclaringTypeName,
 
-    ImmutableArray<ContainingTypeGenerationMetadata> ContainingTypes,
+    ImmutableArray<ContainingTypeMetadata> ContainingTypes,
     ImmutableArray<RawParameterMetadata> Parameters,
 
     // Method characteristics.
@@ -30,7 +30,6 @@ public sealed record RawMethodMetadata(
     bool IsAsync,
     bool IsStatic,
     bool HasCancellationToken,
-    bool IsDeclaringTypePartial,
 
     // Diagnostic configuration.
     string SpanName,

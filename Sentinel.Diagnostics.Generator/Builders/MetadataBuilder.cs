@@ -57,7 +57,6 @@ public sealed class MetadataBuilder
             IsAsync: rawMetadata.IsAsync,
             IsStatic: rawMetadata.IsStatic,
             HasCancellationToken: rawMetadata.HasCancellationToken,
-            IsDeclaringTypePartial: rawMetadata.IsDeclaringTypePartial,
 
             MethodAccessibility: rawMetadata.MethodAccessibility,
             DeclaringTypeAccessibility: rawMetadata.DeclaringTypeAccessibility);

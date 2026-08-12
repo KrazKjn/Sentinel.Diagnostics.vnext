@@ -1,10 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Sentinel.Diagnostics.Generator.Configuration
+﻿namespace Sentinel.Diagnostics.Generator.Configuration
 {
-    internal class ProjectAutoLogOptions
+    public sealed class ProjectAutoLogOptions
     {
+        public bool? Enabled { get; init; }
+        public bool? AddUsing { get; init; }
+        public bool? AddTryCatch { get; init; }
+        public bool? LogParameters { get; init; }
+        public bool? LogDuration { get; init; }
+        public string? Policy { get; init; }
+        public string? Span { get; init; }
     }
 }

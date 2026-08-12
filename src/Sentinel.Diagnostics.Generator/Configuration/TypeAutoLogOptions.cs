@@ -6,7 +6,7 @@ namespace Sentinel.Diagnostics.Generator.Configuration;
 /// Nullable values indicate that the configuration level did not specify
 /// a value and that resolution should continue to the parent configuration.
 /// </summary>
-internal sealed record AutoLogConfiguration(
+public sealed record TypeAutoLogOptions(
     bool? Enabled = null,
     bool? AddUsing = null,
     bool? AddTryCatch = null,

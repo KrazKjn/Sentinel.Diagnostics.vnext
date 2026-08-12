@@ -5,14 +5,14 @@ namespace Sentinel.Diagnostics.Generator.Configuration;
 internal static class ConfigurationResolver
 {
     public static EffectiveAutoLogOptions Resolve(
-        AutoLogConfiguration projectOptions,
-        IReadOnlyList<AutoLogConfiguration> containingTypeOptions,
-        AutoLogConfiguration? methodOptions,
+        TypeAutoLogOptions projectOptions,
+        IReadOnlyList<TypeAutoLogOptions> containingTypeOptions,
+        TypeAutoLogOptions? methodOptions,
         string methodName)
     {
-        AutoLogConfiguration effective = projectOptions;
+        TypeAutoLogOptions effective = projectOptions;
 
-        foreach (AutoLogConfiguration typeOptions in containingTypeOptions)
+        foreach (TypeAutoLogOptions typeOptions in containingTypeOptions)
         {
             effective = Merge(effective, typeOptions);
         }
@@ -34,11 +34,11 @@ internal static class ConfigurationResolver
         };
     }
 
-    private static AutoLogConfiguration Merge(
-        AutoLogConfiguration parent,
-        AutoLogConfiguration child)
+    private static TypeAutoLogOptions Merge(
+        TypeAutoLogOptions parent,
+        TypeAutoLogOptions child)
     {
-        return new AutoLogConfiguration(
+        return new TypeAutoLogOptions(
             Enabled: child.Enabled ?? parent.Enabled,
             AddUsing: child.AddUsing ?? parent.AddUsing,
             AddTryCatch: child.AddTryCatch ?? parent.AddTryCatch,

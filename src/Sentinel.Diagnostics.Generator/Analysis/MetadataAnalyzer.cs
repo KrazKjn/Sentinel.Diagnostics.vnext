@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Sentinel.Diagnostics.Generator.Configuration;
 using Sentinel.Diagnostics.Generator.Metadata;
+using Sentinel.Diagnostics.Generator.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;

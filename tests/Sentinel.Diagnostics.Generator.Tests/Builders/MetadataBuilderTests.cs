@@ -1,6 +1,7 @@
 ﻿using Sentinel.Diagnostics.Generator.Builders;
 using Sentinel.Diagnostics.Generator.Configuration;
 using Sentinel.Diagnostics.Generator.Metadata;
+using Sentinel.Diagnostics.Generator.Models;
 using System.Collections.Immutable;
 
 namespace Builders;

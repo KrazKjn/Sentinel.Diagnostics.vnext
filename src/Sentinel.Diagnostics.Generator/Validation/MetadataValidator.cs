@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Sentinel.Diagnostics.Generator.Diagnostics;
 using Sentinel.Diagnostics.Generator.Metadata;
+using Sentinel.Diagnostics.Generator.Models;
 using System;
 using System.Collections.Immutable;
 using System.Linq;

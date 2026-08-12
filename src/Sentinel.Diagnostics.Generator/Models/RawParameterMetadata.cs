@@ -1,6 +1,7 @@
 using Microsoft.CodeAnalysis;
+using Sentinel.Diagnostics.Generator.Metadata;
 
-namespace Sentinel.Diagnostics.Generator.Metadata;
+namespace Sentinel.Diagnostics.Generator.Models;
 
 /// <summary>
 /// Raw semantic metadata describing a single method parameter.

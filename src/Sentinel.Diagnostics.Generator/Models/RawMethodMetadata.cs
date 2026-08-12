@@ -1,8 +1,9 @@
 using Microsoft.CodeAnalysis;
 using Sentinel.Diagnostics.Generator.Configuration;
+using Sentinel.Diagnostics.Generator.Metadata;
 using System.Collections.Immutable;
 
-namespace Sentinel.Diagnostics.Generator.Metadata;
+namespace Sentinel.Diagnostics.Generator.Models;
 
 /// <summary>
 /// Raw semantic metadata extracted from a method decorated with

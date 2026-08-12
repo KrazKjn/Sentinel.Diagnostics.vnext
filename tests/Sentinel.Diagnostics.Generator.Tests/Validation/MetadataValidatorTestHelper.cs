@@ -1,4 +1,5 @@
 ﻿using Sentinel.Diagnostics.Generator.Metadata;
+using Sentinel.Diagnostics.Generator.Models;
 using Sentinel.Diagnostics.Generator.Validation;
 
 namespace Sentinel.Diagnostics.Generator.Tests.Validation;

@@ -2,7 +2,7 @@
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Sentinel.Diagnostics.Generator.Analysis;
 using Sentinel.Diagnostics.Generator.Builders;
-using Sentinel.Diagnostics.Generator.Metadata;
+using Sentinel.Diagnostics.Generator.Models;
 using Sentinel.Diagnostics.Generator.Validation;
 using System;
 using System.Linq;

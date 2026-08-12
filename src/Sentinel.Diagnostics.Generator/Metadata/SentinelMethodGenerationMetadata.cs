@@ -39,7 +39,7 @@ public sealed record SentinelMethodGenerationMetadata(
     ImmutableArray<string> GenericTypeParameters,
 
     // Attribute-derived configuration.
-    string SpanName,
+    string? SpanName,
     string? PolicyName,
 
     // Accessibility information.

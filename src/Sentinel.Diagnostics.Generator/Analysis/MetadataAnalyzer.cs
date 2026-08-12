@@ -21,6 +21,18 @@ public sealed class MetadataAnalyzer(Compilation compilation)
             compilation.GetTypeByMetadataName("Sentinel.Diagnostics.Core.Attributes.SensitiveAttribute");
     private readonly INamedTypeSymbol? _cancellationTokenSymbol =
             compilation.GetTypeByMetadataName("System.Threading.CancellationToken");
+    private static readonly SymbolDisplayFormat FullyQualifiedTypeFormat =
+        new SymbolDisplayFormat(
+            globalNamespaceStyle: SymbolDisplayGlobalNamespaceStyle.Included,
+            typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
+            genericsOptions:
+                SymbolDisplayGenericsOptions.IncludeTypeParameters |
+                SymbolDisplayGenericsOptions.IncludeVariance,
+            miscellaneousOptions:
+                SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers |
+                SymbolDisplayMiscellaneousOptions.UseSpecialTypes,
+            memberOptions: SymbolDisplayMemberOptions.None
+        );
 
     /// <summary>
     /// Analyzes a method declaration using the supplied SemanticModel.
@@ -41,8 +53,16 @@ public sealed class MetadataAnalyzer(Compilation compilation)
             return null;
         }
 
-        AutoLogAttributeData? autoLog =
-            GetAutoLogAttribute(methodSymbol, methodDeclaration);
+        //AutoLogAttributeData? autoLog =
+        //    GetAutoLogAttribute(methodSymbol, methodDeclaration);
+
+        var autoLogAttributes = GetAutoLogAttributes(methodSymbol, methodDeclaration);
+
+        if (autoLogAttributes.Count == 0)
+            return null;
+
+        // TODO: Handle multiple AutoLog attributes on the same method (e.g., for different policies).
+        AutoLogAttributeData autoLog = autoLogAttributes[0];
 
         if (autoLog is null)
         {
@@ -110,8 +130,8 @@ public sealed class MetadataAnalyzer(Compilation compilation)
 
             ReturnTypeName: returnTypeName,
             FullyQualifiedReturnTypeName: fullyQualifiedReturnTypeName,
-            SpanName: spanName,
-            PolicyName: autoLog.Policy,
+            RawSpan: spanName,
+            RawPolicy: autoLog.Policy,
 
             IsAsync: isAsync,
             IsIterator: isIterator,
@@ -145,13 +165,14 @@ public sealed class MetadataAnalyzer(Compilation compilation)
                 parameter.Type.ToDisplayString(
                     SymbolDisplayFormat.MinimallyQualifiedFormat);
 
-            string? fullyQualifiedParameterType =
-                parameter.Type.ToDisplayString(
-                    SymbolDisplayFormat.FullyQualifiedFormat);
+            //string? fullyQualifiedParameterType = parameter.Type.ToDisplayString(FullyQualifiedTypeFormat);
+            string? fullyQualifiedParameterType = GetFullyQualifiedType(parameter.Type);
 
             bool isSensitive = IsSensitiveParameter(parameter, _sensitiveSymbol);
 
-            bool shouldLog = true; // Future: support [NoLog]
+            bool shouldLog = isSensitive ? false : true; // TODO: support [NoLog], default to Not showing Sensitive data.
+                                                         // Should support a [NoLog] attribute or a property on the AutoLog attribute to indicate that this parameter should not be logged.
+                                                         // Should allow for Showing Sensitive data if explicitly requested, but default to not showing it.
 
             string? defaultValueExpression =
                 parameter.HasExplicitDefaultValue
@@ -174,7 +195,7 @@ public sealed class MetadataAnalyzer(Compilation compilation)
 
         return builder.ToImmutable();
     }
-    
+
     private static string? GetDefaultValueExpression(
         IParameterSymbol parameter)
     {
@@ -257,6 +278,7 @@ public sealed class MetadataAnalyzer(Compilation compilation)
     /// Resolves the AutoLog attribute using symbol comparison.
     /// Supports both named and positional constructor arguments.
     /// </summary>
+    /*
     private AutoLogAttributeData? GetAutoLogAttribute(
         IMethodSymbol methodSymbol,
         MethodDeclarationSyntax methodDeclaration)
@@ -330,6 +352,95 @@ public sealed class MetadataAnalyzer(Compilation compilation)
 
         return null;
     }
+    */
+
+    /// <summary>
+    /// Extracts all AutoLog attributes applied to any symbol (method, class, interface, property).
+    /// Supports semantic binding, syntax fallback, inheritance, aliases, positional + named args.
+    /// </summary>
+    private static IReadOnlyList<AutoLogAttributeData> GetAutoLogAttributes(
+        ISymbol symbol,
+        SyntaxNode declarationSyntax)
+    {
+        var results = new List<AutoLogAttributeData>();
+
+        foreach (var attributeData in symbol.GetAttributes())
+        {
+            if (!IsAutoLogAttribute(attributeData))
+                continue;
+
+            string? policy = null;
+            string? span = null;
+
+            // -------------------------------
+            // 1. SEMANTIC BINDING (preferred)
+            // -------------------------------
+
+            // Positional constructor arguments
+            if (attributeData.ConstructorArguments.Length > 0)
+            {
+                if (attributeData.ConstructorArguments[0].Value is string p)
+                    policy = p;
+
+                if (attributeData.ConstructorArguments.Length > 1 &&
+                    attributeData.ConstructorArguments[1].Value is string s)
+                    span = s;
+            }
+
+            // Named arguments
+            foreach (var named in attributeData.NamedArguments)
+            {
+                if (named.Key == "Policy")
+                    policy = named.Value.Value as string;
+
+                if (named.Key == "Span")
+                    span = named.Value.Value as string;
+            }
+
+            // -------------------------------
+            // 2. SYNTAX FALLBACK (always works)
+            // -------------------------------
+
+            if (policy is null || span is null)
+            {
+                foreach (var attrList in declarationSyntax.DescendantNodesAndSelf().OfType<AttributeListSyntax>())
+                {
+                    foreach (var attrSyntax in attrList.Attributes)
+                    {
+                        if (!AttributeNameMatches(attrSyntax.Name))
+                            continue;
+
+                        var args = ExtractAttributeArguments(attrSyntax);
+
+                        // Named
+                        if (policy is null && args.TryGetValue("Policy", out var p))
+                            policy = p;
+
+                        if (span is null && args.TryGetValue("Span", out var s))
+                            span = s;
+
+                        // Positional
+                        if (policy is null && args.TryGetValue("_arg0", out var p0))
+                            policy = p0;
+
+                        if (span is null && args.TryGetValue("_arg1", out var s1))
+                            span = s1;
+                    }
+                }
+            }
+
+            // -------------------------------
+            // 3. DEFAULT VALUES (optional)
+            // -------------------------------
+
+            policy ??= "DefaultPolicy";
+            span ??= symbol.Name; // default span = method/class/property name
+
+            results.Add(new AutoLogAttributeData(policy, span));
+        }
+
+        return results;
+    }
 
 
     private static bool IsAutoLogAttribute(AttributeData attribute)
@@ -337,8 +448,10 @@ public sealed class MetadataAnalyzer(Compilation compilation)
         var attrClass = attribute.AttributeClass;
         if (attrClass == null)
             return false;
-        return attrClass.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
-            == "global::Sentinel.Diagnostics.Core.Attributes.AutoLogAttribute";
+        //return attrClass.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
+        //    == "global::Sentinel.Diagnostics.Core.Attributes.AutoLogAttribute";
+        return attrClass.Name == "AutoLogAttribute"
+            || attrClass.BaseType?.Name == "AutoLogAttribute";
     }
 
     private static bool IsSensitiveAttribute(AttributeData attribute)
@@ -346,8 +459,10 @@ public sealed class MetadataAnalyzer(Compilation compilation)
         var attrClass = attribute.AttributeClass;
         if (attrClass == null)
             return false;
-        return attrClass.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
-            == "global::Sentinel.Diagnostics.Core.Attributes.SensitiveAttribute";
+        //return attrClass.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
+        //    == "global::Sentinel.Diagnostics.Core.Attributes.SensitiveAttribute";
+        return attrClass.Name == "SensitiveAttribute"
+            || attrClass.BaseType?.Name == "SensitiveAttribute";
     }
 
     private static bool IsSensitiveParameter(IParameterSymbol parameterSymbol, INamedTypeSymbol? sensitiveSymbol)
@@ -408,7 +523,7 @@ public sealed class MetadataAnalyzer(Compilation compilation)
             TypeParameters: typeParameters);
     }
 
-    private static Dictionary<string, string?> ExtractAttributeArguments(AttributeSyntax attributeSyntax)
+    private static Dictionary<string, string?> ExtractAttributeArguments_old(AttributeSyntax attributeSyntax)
     {
         var results = new Dictionary<string, string?>(StringComparer.Ordinal);
 
@@ -452,5 +567,84 @@ public sealed class MetadataAnalyzer(Compilation compilation)
         }
 
         return results;
+    }
+    private static bool AttributeNameMatches(NameSyntax name)
+    {
+        // Handles: AutoLog, AutoLogAttribute, AL, Sentinel.Diagnostics.Core.Attributes.AutoLogAttribute
+        var identifier = name switch
+        {
+            IdentifierNameSyntax id => id.Identifier.Text,
+            QualifiedNameSyntax q => q.Right.Identifier.Text,
+            AliasQualifiedNameSyntax a => a.Alias.Identifier.Text,
+            _ => name.ToString()
+        };
+
+        return identifier == "AutoLog"
+            || identifier == "AutoLogAttribute"
+            || identifier == "Sentinel.Diagnostics.Core.Attributes.AutoLogAttribute"
+            || identifier == "AL"; // alias support
+    }
+
+    private static Dictionary<string, string?> ExtractAttributeArguments(AttributeSyntax attributeSyntax)
+    {
+        var results = new Dictionary<string, string?>(StringComparer.Ordinal);
+
+        if (attributeSyntax.ArgumentList is null)
+            return results;
+
+        int positionalIndex = 0;
+
+        foreach (var arg in attributeSyntax.ArgumentList.Arguments)
+        {
+            string name;
+
+            if (arg.NameEquals is not null)
+                name = arg.NameEquals.Name.Identifier.Text;
+            else if (arg.NameColon is not null)
+                name = arg.NameColon.Name.Identifier.Text;
+            else
+                name = $"_arg{positionalIndex++}";
+
+            string? value = arg.Expression switch
+            {
+                LiteralExpressionSyntax literal => literal.Token.ValueText,
+                IdentifierNameSyntax ident => ident.Identifier.Text,
+                MemberAccessExpressionSyntax member => member.ToString(),
+                InvocationExpressionSyntax invocation => invocation.ToString(),
+                _ => arg.Expression.ToString().Trim('"')
+            };
+
+            results[name] = value;
+        }
+
+        return results;
+    }
+
+    private static string GetFullyQualifiedType(ITypeSymbol type)
+    {
+        // Handle arrays
+        if (type is IArrayTypeSymbol array)
+        {
+            var element = array.ElementType;
+            var elementName = GetFullyQualifiedType(element); // recursive!
+            return $"{elementName}{GetArraySuffix(array)}";
+        }
+
+        // Handle special types manually
+        if (type.SpecialType != SpecialType.None)
+        {
+            return $"global::{type.ContainingNamespace}.{type.Name}";
+        }
+
+        // Normal types
+        return type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+    }
+
+    private static string GetArraySuffix(IArrayTypeSymbol array)
+    {
+        if (array.Rank == 1)
+            return "[]";
+
+        return "[" + new string(',', array.Rank - 1) + "]";
     }
 }

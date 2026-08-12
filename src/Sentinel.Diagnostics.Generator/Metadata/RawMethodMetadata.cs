@@ -34,6 +34,7 @@ public sealed record RawMethodMetadata(
     // Method characteristics.
     string ReturnTypeName,
     string FullyQualifiedReturnTypeName,
+
     bool IsAsync,
     bool IsIterator,
     bool IsStatic,
@@ -41,9 +42,10 @@ public sealed record RawMethodMetadata(
     bool IsGenericMethod,
     ImmutableArray<string> GenericTypeParameters,
 
+    // Raw attribute values (may be null, invalid, missing)
     // Attribute-derived configuration.
-    string SpanName,
-    string? PolicyName,
+    string? RawSpan,
+    string? RawPolicy,
 
     // Accessibility information.
     Accessibility MethodAccessibility,

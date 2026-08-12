@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Sentinel.Diagnostics.Generator.Analysis;
 using Sentinel.Diagnostics.Generator.Builders;
 using Sentinel.Diagnostics.Generator.Metadata;
+using Sentinel.Diagnostics.Generator.Validation;
 using System;
 using System.Linq;
 
@@ -108,33 +109,73 @@ public sealed class SentinelDiagnosticsGenerator : IIncrementalGenerator
 
         /*
          * ================================================================
-         * Stage 3 — Metadata Building
+         * Stage 3 — Phase‑3 Validation + Stage 4 — Metadata Building
          * ================================================================
          *
-         * MetadataBuilder transforms RawMethodMetadata into finalized
-         * generator-side metadata.
-         *
-         * MetadataBuilder performs no semantic analysis and generates
-         * no source code. The resulting SentinelMethodGenerationMetadata
-         * contains all information required by the vNext Instrumentation
-         * Engine for method-body rewriting.
+         * Validation requires SourceProductionContext, so it must occur inside
+         * RegisterSourceOutput.
          */
-        IncrementalValuesProvider<SentinelMethodGenerationMetadata> methodMetadataProvider =
-            validAnalyzedMethods.Select(static (rawMetadata, _) =>
-                MetadataBuilder.Build(rawMetadata));
+        context.RegisterSourceOutput(validAnalyzedMethods, (spc, raw) =>
+        {
+            /*
+             * ================================================================
+             * Stage 3 — Phase‑3 Validation
+             * ================================================================
+             *
+             * MetadataValidator transforms RawMethodMetadata into ValidatedMethodMetadata.
+             * Invalid methods produce diagnostics and are filtered out.
+             *
+             * This ensures:
+             *   - AutoLog usage is valid
+             *   - sensitive parameter rules are enforced
+             *   - CancellationToken rules are enforced
+             *   - span/policy values are valid
+             *   - inherited attributes are resolved correctly
+             *
+             * Only validated metadata proceeds to Stage 4.
+             */
+            //IncrementalValuesProvider<ValidatedMethodMetadata?> validatedMethods =
+            //validAnalyzedMethods.Select(static (raw, context) =>
+            //    MetadataValidator.Validate(raw, spc));
 
+            //IncrementalValuesProvider<ValidatedMethodMetadata> validValidatedMethods =
+            //    validatedMethods
+            //        .Where(static validated => validated is not null)
+            //        .Select(static (validated, _) => validated!);
+
+            var validated = MetadataValidator.Validate(raw, spc);
+            if (validated is null)
+                return;
+
+            /*
+             * ================================================================
+             * Stage 4 — Metadata Building
+             * ================================================================
+             *
+             * MetadataBuilder transforms ValidatedMethodMetadata into finalized
+             * generator-side metadata (SentinelMethodGenerationMetadata).
+             *
+             * MetadataBuilder performs no semantic analysis and generates no source code.
+             * The resulting metadata contains all information required by the vNext
+             * Instrumentation Engine for method-body rewriting.
+             */
+            //IncrementalValuesProvider<SentinelMethodGenerationMetadata> methodMetadataProvider =
+            //    validValidatedMethods.Select(static (validated, _) =>
+            //        MetadataBuilder.Build(validated));
+            
+            var built = MetadataBuilder.Build(validated);
+        });
         /*
          * ================================================================
-         * Stage 4 — Instrumentation Engine Integration
+         * Stage 5 — Instrumentation Engine Integration
          * ================================================================
          *
          * In vNext, the incremental generator does not emit source code.
          * Instead, the finalized metadata is consumed by the Instrumentation
          * Engine, which performs IL/method-body rewriting.
          *
-         * No source emission occurs here.
+         * No RegisterSourceOutput calls are required.
          */
-        // (No RegisterSourceOutput calls required in vNext.)
     }
 
     /// <summary>

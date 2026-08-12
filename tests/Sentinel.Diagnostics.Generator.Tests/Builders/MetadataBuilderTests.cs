@@ -2,7 +2,7 @@
 using Sentinel.Diagnostics.Generator.Metadata;
 using System.Collections.Immutable;
 
-namespace Sentinel.Diagnostics.Generator.Tests;
+namespace Builders;
 
 public sealed class MetadataBuilderTests
 {
@@ -19,8 +19,8 @@ public sealed class MetadataBuilderTests
             ContainingTypes: ImmutableArray<ContainingTypeMetadata>.Empty,
             ReturnTypeName: "int",
             FullyQualifiedReturnTypeName: "global::System.Int32",
-            SpanName: "M",
-            PolicyName: null,
+            RawSpan: "M",
+            RawPolicy: null,
             IsAsync: false,
             IsIterator: false,
             IsStatic: false,

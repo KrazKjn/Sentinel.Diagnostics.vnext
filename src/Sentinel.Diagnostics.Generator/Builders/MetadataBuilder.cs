@@ -1,6 +1,8 @@
-﻿using Sentinel.Diagnostics.Generator.Compatibility;
+﻿using Microsoft.CodeAnalysis;
+using Sentinel.Diagnostics.Generator.Compatibility;
 using Sentinel.Diagnostics.Generator.Metadata;
 using System.Collections.Immutable;
+using System.Linq;
 
 namespace Sentinel.Diagnostics.Generator.Builders;
 
@@ -46,8 +48,8 @@ public sealed class MetadataBuilder
             ReturnTypeName: rawMetadata.ReturnTypeName,
             FullyQualifiedReturnTypeName: rawMetadata.FullyQualifiedReturnTypeName,
 
-            SpanName: rawMetadata.SpanName,
-            PolicyName: rawMetadata.PolicyName,
+            SpanName: rawMetadata.RawSpan,
+            PolicyName: rawMetadata.RawPolicy,
 
             IsAsync: rawMetadata.IsAsync,
             IsIterator: rawMetadata.IsIterator,
@@ -58,6 +60,51 @@ public sealed class MetadataBuilder
 
             MethodAccessibility: rawMetadata.MethodAccessibility,
             DeclaringTypeAccessibility: rawMetadata.DeclaringTypeAccessibility);
+    }
+
+    public static SentinelMethodGenerationMetadata Build(ValidatedMethodMetadata validated)
+    {
+        Guard.NotNull(validated, nameof(validated));
+
+        var parameters =
+            validated.Parameters
+                .Select(p => new SentinelParameterGenerationMetadata(
+                    Name: p.Name,
+                    TypeName: p.FullyQualifiedTypeName.Split('.').Last(),
+                    FullyQualifiedTypeName: p.FullyQualifiedTypeName,
+                    IsSensitive: p.IsSensitive,
+                    IsNullable: p.IsNullable,
+                    ShouldLog: p.ShouldLog,
+                    RefKind: p.RefKind,
+                    IsParams: p.IsParams,
+                    HasExplicitDefaultValue: p.HasExplicitDefaultValue,
+                    DefaultValueExpression: p.DefaultValueExpression
+                ))
+                .ToImmutableArray();
+
+        // Build your final metadata from validated input
+        return new SentinelMethodGenerationMetadata(
+            MethodName: validated.MethodName,
+            MethodLocation: validated.MethodLocation,
+            FullyQualifiedMethodName: validated.FullyQualifiedMethodName,
+            DeclaringNamespace: validated.DeclaringNamespace,
+            DeclaringTypeName: validated.DeclaringTypeName,
+            FullyQualifiedDeclaringTypeName: validated.FullyQualifiedDeclaringTypeName,
+            ContainingTypes: validated.ContainingTypes,
+            SpanName: validated.SpanName,
+            PolicyName: validated.PolicyName,
+            ReturnTypeName: validated.ReturnTypeName,
+            FullyQualifiedReturnTypeName: validated.FullyQualifiedReturnTypeName,
+            IsAsync: validated.IsAsync,
+            IsIterator: validated.IsIterator,
+            IsStatic: validated.IsStatic,
+            IsGenericMethod: validated.GenericTypeParameters.Length > 0,
+            HasCancellationToken: validated.HasCancellationToken,
+            GenericTypeParameters: validated.GenericTypeParameters,
+            MethodAccessibility: validated.MethodAccessibility,
+            DeclaringTypeAccessibility: validated.DeclaringTypeAccessibility,
+            Parameters: parameters
+        );
     }
 
     /// <summary>

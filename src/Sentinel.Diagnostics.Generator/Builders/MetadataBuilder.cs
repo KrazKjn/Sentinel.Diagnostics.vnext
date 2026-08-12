@@ -48,8 +48,7 @@ public sealed class MetadataBuilder
             ReturnTypeName: rawMetadata.ReturnTypeName,
             FullyQualifiedReturnTypeName: rawMetadata.FullyQualifiedReturnTypeName,
 
-            SpanName: rawMetadata.RawSpan,
-            PolicyName: rawMetadata.RawPolicy,
+            Options: rawMetadata.Options,
 
             IsAsync: rawMetadata.IsAsync,
             IsIterator: rawMetadata.IsIterator,
@@ -91,8 +90,7 @@ public sealed class MetadataBuilder
             DeclaringTypeName: validated.DeclaringTypeName,
             FullyQualifiedDeclaringTypeName: validated.FullyQualifiedDeclaringTypeName,
             ContainingTypes: validated.ContainingTypes,
-            SpanName: validated.SpanName,
-            PolicyName: validated.PolicyName,
+            Options: validated.Options,
             ReturnTypeName: validated.ReturnTypeName,
             FullyQualifiedReturnTypeName: validated.FullyQualifiedReturnTypeName,
             IsAsync: validated.IsAsync,

@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Sentinel.Diagnostics.Generator.Configuration;
 using Sentinel.Diagnostics.Generator.Metadata;
 using System;
 using System.Collections.Generic;
@@ -117,6 +118,26 @@ public sealed class MetadataAnalyzer(Compilation compilation)
         string spanName =
             autoLog.Span ?? methodSymbol.Name;
 
+        // TODO: Resolve options from project, containing type, and method attributes.
+        //EffectiveAutoLogOptions options =
+        //    ConfigurationResolver.Resolve(
+        //        projectOptions,
+        //        containingTypeOptions,
+        //        methodOptions,
+        //        methodSymbol.Name);
+
+        EffectiveAutoLogOptions options =
+            new EffectiveAutoLogOptions
+            {
+                Enabled = true,
+                AddUsing = true,
+                AddTryCatch = true,
+                LogParameters = true,
+                LogDuration = true,
+                Policy = autoLog.Policy ?? "Default",
+                Span = autoLog.Span ?? methodSymbol.Name
+            };
+
         return new RawMethodMetadata(
             MethodName: methodSymbol.Name,
             MethodLocation: methodDeclaration.GetLocation(),
@@ -130,8 +151,6 @@ public sealed class MetadataAnalyzer(Compilation compilation)
 
             ReturnTypeName: returnTypeName,
             FullyQualifiedReturnTypeName: fullyQualifiedReturnTypeName,
-            RawSpan: spanName,
-            RawPolicy: autoLog.Policy,
 
             IsAsync: isAsync,
             IsIterator: isIterator,
@@ -143,6 +162,7 @@ public sealed class MetadataAnalyzer(Compilation compilation)
                 .ToImmutableArray(),
 
             Parameters: parameters,
+            Options: options,
 
             MethodAccessibility: methodSymbol.DeclaredAccessibility,
             DeclaringTypeAccessibility: methodSymbol.ContainingType.DeclaredAccessibility);
@@ -436,7 +456,15 @@ public sealed class MetadataAnalyzer(Compilation compilation)
             policy ??= "DefaultPolicy";
             span ??= symbol.Name; // default span = method/class/property name
 
-            results.Add(new AutoLogAttributeData(policy, span));
+            //results.Add(new AutoLogAttributeData(policy, span, true));
+            results.Add(new AutoLogAttributeData(
+                Policy: policy,
+                Span: span,
+                Enabled: true,
+                AddUsing: true,
+                AddTryCatch: true,
+                LogParameters: true,
+                LogDuration: true));
         }
 
         return results;

@@ -1,4 +1,5 @@
 using Microsoft.CodeAnalysis;
+using Sentinel.Diagnostics.Generator.Configuration;
 using System.Collections.Immutable;
 
 namespace Sentinel.Diagnostics.Generator.Metadata;
@@ -29,7 +30,12 @@ public sealed record RawMethodMetadata(
     string FullyQualifiedDeclaringTypeName,
 
     ImmutableArray<ContainingTypeMetadata> ContainingTypes,
+
     ImmutableArray<RawParameterMetadata> Parameters,
+
+    // Raw attribute values (may be null, invalid, missing)
+    // Attribute-derived configuration.
+    EffectiveAutoLogOptions Options,
 
     // Method characteristics.
     string ReturnTypeName,
@@ -39,13 +45,10 @@ public sealed record RawMethodMetadata(
     bool IsIterator,
     bool IsStatic,
     bool HasCancellationToken,
+
     bool IsGenericMethod,
     ImmutableArray<string> GenericTypeParameters,
 
-    // Raw attribute values (may be null, invalid, missing)
-    // Attribute-derived configuration.
-    string? RawSpan,
-    string? RawPolicy,
 
     // Accessibility information.
     Accessibility MethodAccessibility,

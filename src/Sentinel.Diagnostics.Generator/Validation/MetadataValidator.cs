@@ -46,25 +46,25 @@ public static class MetadataValidator
         // ---------------------------------------------------------------------
         // RULE 1 — AutoLog attribute correctness
         // ---------------------------------------------------------------------
-        if (string.IsNullOrWhiteSpace(raw.RawPolicy))
+        if (string.IsNullOrWhiteSpace(raw.Options.Policy))
         {
             reportDiagnostic(
                 Diagnostic.Create(
                     DiagnosticDescriptors.InvalidPolicyName,
                     raw.MethodLocation,
-                    raw.RawPolicy ?? "<null>",
+                    raw.Options.Policy ?? "<null>",
                     "Policy cannot be null, empty, or whitespace"));
 
             return null;
         }
 
-        if (string.IsNullOrWhiteSpace(raw.RawSpan))
+        if (string.IsNullOrWhiteSpace(raw.Options.Span))
         {
             reportDiagnostic(
                 Diagnostic.Create(
                     DiagnosticDescriptors.InvalidSpanName,
                     raw.MethodLocation,
-                    raw.RawSpan ?? "<null>",
+                    raw.Options.Span ?? "<null>",
                     "Span cannot be null, empty, or whitespace"));
 
             return null;
@@ -164,7 +164,7 @@ public static class MetadataValidator
         // ---------------------------------------------------------------------
         // RULE 5 — Span validation
         // ---------------------------------------------------------------------
-        string validatedSpan = raw.RawSpan!.Trim();
+        string validatedSpan = raw.Options.Span!.Trim();
 
         if (validatedSpan.Length == 0)
         {
@@ -193,7 +193,7 @@ public static class MetadataValidator
         // ---------------------------------------------------------------------
         // RULE 6 — Policy validation
         // ---------------------------------------------------------------------
-        string validatedPolicy = raw.RawPolicy!.Trim();
+        string validatedPolicy = raw.Options.Policy!.Trim();
 
         if (validatedPolicy.Length == 0)
         {
@@ -249,8 +249,7 @@ public static class MetadataValidator
             ContainingTypes: raw.ContainingTypes,
             ReturnTypeName: raw.ReturnTypeName,
             FullyQualifiedReturnTypeName: raw.FullyQualifiedReturnTypeName,
-            SpanName: validatedSpan,
-            PolicyName: validatedPolicy,
+            Options: raw.Options,
             IsAsync: raw.IsAsync,
             IsIterator: raw.IsIterator,
             IsStatic: raw.IsStatic,

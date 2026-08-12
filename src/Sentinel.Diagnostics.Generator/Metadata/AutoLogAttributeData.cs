@@ -12,4 +12,9 @@ namespace Sentinel.Diagnostics.Generator.Metadata;
 /// </summary>
 internal sealed record AutoLogAttributeData(
     string? Policy,
-    string? Span);
+    string? Span,
+    bool? Enabled,
+    bool? AddUsing,
+    bool? AddTryCatch,
+    bool? LogParameters,
+    bool? LogDuration);

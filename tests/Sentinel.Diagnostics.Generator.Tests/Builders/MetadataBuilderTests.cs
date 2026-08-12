@@ -1,4 +1,5 @@
 ﻿using Sentinel.Diagnostics.Generator.Builders;
+using Sentinel.Diagnostics.Generator.Configuration;
 using Sentinel.Diagnostics.Generator.Metadata;
 using System.Collections.Immutable;
 
@@ -19,8 +20,16 @@ public sealed class MetadataBuilderTests
             ContainingTypes: ImmutableArray<ContainingTypeMetadata>.Empty,
             ReturnTypeName: "int",
             FullyQualifiedReturnTypeName: "global::System.Int32",
-            RawSpan: "M",
-            RawPolicy: null,
+            Options: new EffectiveAutoLogOptions
+            {
+                Span = "M",
+                Policy = "Default",
+                Enabled = true,
+                AddUsing = true,
+                AddTryCatch = true,
+                LogParameters = true,
+                LogDuration = true
+            },
             IsAsync: false,
             IsIterator: false,
             IsStatic: false,

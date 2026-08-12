@@ -4,7 +4,7 @@ namespace Sentinel.Diagnostics.Core.Attributes;
 /// <summary>
 /// Marks a method for automatic Sentinel Diagnostics instrumentation.
 /// </summary>
-[AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
 public sealed class AutoLogAttribute : Attribute
 {
     public AutoLogAttribute(string? Policy = null, string? Span = null)
@@ -23,4 +23,14 @@ public sealed class AutoLogAttribute : Attribute
     /// When not specified, the method name is used.
     /// </summary>
     public string? Span { get; }
+
+    public bool? Enabled { get; set; }
+
+    public bool? AddUsing { get; set; }
+
+    public bool? AddTryCatch { get; set; }
+
+    public bool? LogParameters { get; set; }
+
+    public bool? LogDuration { get; set; }
 }

@@ -64,8 +64,8 @@ public sealed class MetadataAnalyzerTests
         var result = analyzer.Analyze(model, method);
 
         Assert.NotNull(result);
-        Assert.Equal("TestPolicy", result!.RawPolicy);
-        Assert.Equal("TestSpan", result.RawSpan);
+        Assert.Equal("TestPolicy", result!.Options.Policy);
+        Assert.Equal("TestSpan", result.Options.Span);
     }
 
     [Fact]
@@ -178,8 +178,8 @@ public sealed class MetadataAnalyzerTests
         var metadata = AnalysisTestHelpers.AnalyzeSingleMethod(source);
 
         Assert.NotNull(metadata);
-        Assert.Equal("TestPolicy", metadata!.RawPolicy);
-        Assert.Equal("TestSpan", metadata.RawSpan);
+        Assert.Equal("TestPolicy", metadata!.Options.Policy);
+        Assert.Equal("TestSpan", metadata.Options.Span);
     }
 
     [Fact]
@@ -198,8 +198,8 @@ public sealed class MetadataAnalyzerTests
         var metadata = AnalysisTestHelpers.AnalyzeSingleMethod(source);
 
         Assert.NotNull(metadata);
-        Assert.Equal("TestPolicy", metadata!.RawPolicy);
-        Assert.Equal("TestSpan", metadata.RawSpan);
+        Assert.Equal("TestPolicy", metadata!.Options.Policy);
+        Assert.Equal("TestSpan", metadata.Options.Span);
     }
 
     [Fact]
@@ -218,8 +218,8 @@ public sealed class MetadataAnalyzerTests
         var metadata = AnalysisTestHelpers.AnalyzeSingleMethod(source);
 
         Assert.NotNull(metadata);
-        Assert.Equal("TestPolicy", metadata!.RawPolicy);
-        Assert.Equal("TestSpan", metadata.RawSpan);
+        Assert.Equal("TestPolicy", metadata!.Options.Policy);
+        Assert.Equal("TestSpan", metadata.Options.Span);
     }
 
     [Fact]
@@ -238,8 +238,8 @@ public sealed class MetadataAnalyzerTests
         var metadata = AnalysisTestHelpers.AnalyzeSingleMethod(source);
 
         Assert.NotNull(metadata);
-        Assert.Equal("DefaultPolicy", metadata!.RawPolicy);
-        Assert.Equal("M", metadata.RawSpan); // default span = symbol.Name
+        Assert.Equal("DefaultPolicy", metadata!.Options.Policy);
+        Assert.Equal("M", metadata.Options.Span); // default span = symbol.Name
     }
 
     [Fact]
@@ -259,8 +259,8 @@ public sealed class MetadataAnalyzerTests
         var metadata = AnalysisTestHelpers.AnalyzeSingleMethod(source);
 
         Assert.NotNull(metadata);
-        Assert.Equal("AliasPolicy", metadata!.RawPolicy);
-        Assert.Equal("AliasSpan", metadata.RawSpan);
+        Assert.Equal("AliasPolicy", metadata!.Options.Policy);
+        Assert.Equal("AliasSpan", metadata.Options.Span);
     }
 
     [Fact]
@@ -285,8 +285,8 @@ public sealed class MetadataAnalyzerTests
         var metadata = AnalysisTestHelpers.AnalyzeSingleMethod(source);
 
         Assert.NotNull(metadata);
-        Assert.Equal("InheritedPolicy", metadata!.RawPolicy);
-        Assert.Equal("InheritedSpan", metadata.RawSpan);
+        Assert.Equal("InheritedPolicy", metadata!.Options.Policy);
+        Assert.Equal("InheritedSpan", metadata.Options.Span);
     }
 
     [Fact]
@@ -306,8 +306,8 @@ public sealed class MetadataAnalyzerTests
         var metadata = AnalysisTestHelpers.AnalyzeSingleMethod(source);
 
         Assert.NotNull(metadata);
-        Assert.Equal("FirstPolicy", metadata!.RawPolicy);
-        Assert.Equal("FirstSpan", metadata.RawSpan);
+        Assert.Equal("FirstPolicy", metadata!.Options.Policy);
+        Assert.Equal("FirstSpan", metadata.Options.Span);
     }
 
     [Fact]
@@ -327,8 +327,8 @@ public sealed class MetadataAnalyzerTests
         var metadata = AnalysisTestHelpers.AnalyzeSingleMethod(source);
 
         Assert.NotNull(metadata);
-        Assert.Equal("MethodPolicy", metadata!.RawPolicy);
-        Assert.Equal("MethodSpan", metadata.RawSpan);
+        Assert.Equal("MethodPolicy", metadata!.Options.Policy);
+        Assert.Equal("MethodSpan", metadata.Options.Span);
     }
 
     [Fact]
@@ -362,8 +362,8 @@ public sealed class MetadataAnalyzerTests
         var metadata = AnalysisTestHelpers.AnalyzeSingleMethod(source);
 
         Assert.NotNull(metadata);
-        Assert.Equal("SyntaxPolicy", metadata!.RawPolicy);
-        Assert.Equal("SyntaxSpan", metadata.RawSpan);
+        Assert.Equal("SyntaxPolicy", metadata!.Options.Policy);
+        Assert.Equal("SyntaxSpan", metadata.Options.Span);
     }
     private static RawMethodMetadata? AnalyzeRaw(string source)
     {
@@ -624,7 +624,7 @@ public sealed class MetadataAnalyzerTests
         Assert.NotNull(validated);
 
         Assert.Equal("M", validated!.MethodName);
-        Assert.Equal("P", validated.PolicyName);
-        Assert.Equal("S", validated.SpanName);
+        Assert.Equal("P", validated.Options.Policy);
+        Assert.Equal("S", validated.Options.Span);
     }
 }

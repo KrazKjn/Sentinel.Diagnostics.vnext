@@ -38,6 +38,8 @@ public sealed record RawMethodMetadata(
     // Attribute-derived configuration.
     EffectiveAutoLogOptions Options,
 
+    AutoLogAttributeOptions Attribute,
+
     // Method characteristics.
     string ReturnTypeName,
     string FullyQualifiedReturnTypeName,
@@ -50,6 +52,9 @@ public sealed record RawMethodMetadata(
     bool IsGenericMethod,
     ImmutableArray<string> GenericTypeParameters,
 
+    // Sensitive parameter metadata (missing before)
+    bool HasSensitiveParameters,
+    ImmutableArray<string> SensitiveParameterNames,
 
     // Accessibility information.
     Accessibility MethodAccessibility,

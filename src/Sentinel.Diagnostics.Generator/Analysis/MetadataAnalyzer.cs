@@ -15,7 +15,7 @@ namespace Sentinel.Diagnostics.Generator.Analysis;
 /// Performs semantic analysis on methods identified by the syntax discovery
 /// stage of the Sentinel Diagnostics incremental source generator.
 /// </summary>
-public sealed class MetadataAnalyzer(Compilation compilation)
+public sealed class MetadataAnalyzer(Compilation compilation, ProjectAutoLogOptions projectOptions)
 {
     private readonly INamedTypeSymbol? _autoLogSymbol =
             compilation.GetTypeByMetadataName("Sentinel.Diagnostics.Core.Attributes.AutoLogAttribute");
@@ -23,18 +23,8 @@ public sealed class MetadataAnalyzer(Compilation compilation)
             compilation.GetTypeByMetadataName("Sentinel.Diagnostics.Core.Attributes.SensitiveAttribute");
     private readonly INamedTypeSymbol? _cancellationTokenSymbol =
             compilation.GetTypeByMetadataName("System.Threading.CancellationToken");
-    private static readonly SymbolDisplayFormat FullyQualifiedTypeFormat =
-        new SymbolDisplayFormat(
-            globalNamespaceStyle: SymbolDisplayGlobalNamespaceStyle.Included,
-            typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
-            genericsOptions:
-                SymbolDisplayGenericsOptions.IncludeTypeParameters |
-                SymbolDisplayGenericsOptions.IncludeVariance,
-            miscellaneousOptions:
-                SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers |
-                SymbolDisplayMiscellaneousOptions.UseSpecialTypes,
-            memberOptions: SymbolDisplayMemberOptions.None
-        );
+    private readonly Compilation _compilation = compilation;
+    private readonly ProjectAutoLogOptions _projectOptions = projectOptions;
 
     /// <summary>
     /// Analyzes a method declaration using the supplied SemanticModel.
@@ -119,6 +109,42 @@ public sealed class MetadataAnalyzer(Compilation compilation)
         string spanName =
             autoLog.Span ?? methodSymbol.Name;
 
+        var methodOptions = new MethodAutoLogOptions
+        {
+            Enabled = autoLog.Enabled,
+            AddUsing = autoLog.AddUsing,
+            AddTryCatch = autoLog.AddTryCatch,
+            LogParameters = autoLog.LogParameters,
+            LogDuration = autoLog.LogDuration,
+            Policy = autoLog.Policy,
+            Span = autoLog.Span
+        };
+
+        var classAutoLogAttributes = GetAutoLogAttributes(methodSymbol.ContainingType, methodDeclaration);
+
+        TypeAutoLogOptions classOptions;
+
+        if (classAutoLogAttributes.Count > 0)
+        {
+            var classAutoLog = classAutoLogAttributes[0];
+
+            classOptions = new TypeAutoLogOptions
+            {
+                Enabled = classAutoLog.Enabled,
+                AddUsing = classAutoLog.AddUsing,
+                AddTryCatch = classAutoLog.AddTryCatch,
+                LogParameters = classAutoLog.LogParameters,
+                LogDuration = classAutoLog.LogDuration,
+                Policy = classAutoLog.Policy,
+                Span = classAutoLog.Span
+            };
+        }
+        else
+        {
+            classOptions = new TypeAutoLogOptions(); // all null → inheritance fallback
+        }
+
+
         // TODO: Resolve options from project, containing type, and method attributes.
         //EffectiveAutoLogOptions options =
         //    ConfigurationResolver.Resolve(
@@ -126,6 +152,12 @@ public sealed class MetadataAnalyzer(Compilation compilation)
         //        containingTypeOptions,
         //        methodOptions,
         //        methodSymbol.Name);
+
+        var effectiveOptions = AutoLogOptionResolver.Resolve(
+            methodOptions,
+            classOptions,
+            _projectOptions,
+            new ProjectAutoLogOptions());
 
         EffectiveAutoLogOptions options =
             new EffectiveAutoLogOptions
@@ -137,6 +169,18 @@ public sealed class MetadataAnalyzer(Compilation compilation)
                 LogDuration = true,
                 Policy = autoLog.Policy ?? "Default",
                 Span = autoLog.Span ?? methodSymbol.Name
+            };
+
+        AutoLogAttributeOptions attributes =
+            new AutoLogAttributeOptions
+            {
+                Policy = autoLog.Policy,
+                Span = autoLog.Span,
+                Enabled = autoLog.Enabled,
+                AddUsing = autoLog.AddUsing,
+                AddTryCatch = autoLog.AddTryCatch,
+                LogParameters = autoLog.LogParameters,
+                LogDuration = autoLog.LogDuration
             };
 
         return new RawMethodMetadata(
@@ -162,8 +206,15 @@ public sealed class MetadataAnalyzer(Compilation compilation)
                 .Select(static parameter => parameter.Name)
                 .ToImmutableArray(),
 
+            HasSensitiveParameters: parameters.Any(p => p.IsSensitive),
+            SensitiveParameterNames: parameters
+                .Where(p => p.IsSensitive)
+                .Select(p => p.Name)
+                .ToImmutableArray(),
+
             Parameters: parameters,
             Options: options,
+            Attribute: attributes,
 
             MethodAccessibility: methodSymbol.DeclaredAccessibility,
             DeclaringTypeAccessibility: methodSymbol.ContainingType.DeclaredAccessibility);
@@ -186,7 +237,6 @@ public sealed class MetadataAnalyzer(Compilation compilation)
                 parameter.Type.ToDisplayString(
                     SymbolDisplayFormat.MinimallyQualifiedFormat);
 
-            //string? fullyQualifiedParameterType = parameter.Type.ToDisplayString(FullyQualifiedTypeFormat);
             string? fullyQualifiedParameterType = GetFullyQualifiedType(parameter.Type);
 
             bool isSensitive = IsSensitiveParameter(parameter, _sensitiveSymbol);
@@ -296,86 +346,6 @@ public sealed class MetadataAnalyzer(Compilation compilation)
     }
 
     /// <summary>
-    /// Resolves the AutoLog attribute using symbol comparison.
-    /// Supports both named and positional constructor arguments.
-    /// </summary>
-    /*
-    private AutoLogAttributeData? GetAutoLogAttribute(
-        IMethodSymbol methodSymbol,
-        MethodDeclarationSyntax methodDeclaration)
-    {
-        foreach (var attributeData in methodSymbol.GetAttributes())
-        {
-            if (!IsAutoLogAttribute(attributeData))
-                continue;
-
-            string? policy = null;
-            string? span = null;
-
-            // --- Semantic binding first ---
-            // Positional constructor args
-            if (attributeData.ConstructorArguments.Length > 0)
-            {
-                if (attributeData.ConstructorArguments[0].Value is string s)
-                    policy = s;
-
-                if (attributeData.ConstructorArguments.Length > 1 &&
-                    attributeData.ConstructorArguments[1].Value is string s2)
-                    span = s2;
-            }
-
-            // Named args
-            foreach (var named in attributeData.NamedArguments)
-            {
-                if (named.Key == "Policy")
-                    policy = named.Value.Value as string;
-
-                if (named.Key == "Span")
-                    span = named.Value.Value as string;
-            }
-
-            // --- Syntax fallback ---
-            if (policy is null || span is null)
-            {
-                foreach (var attrList in methodDeclaration.AttributeLists)
-                {
-                    foreach (var attrSyntax in attrList.Attributes)
-                    {
-                        // Match attribute name or alias
-                        var name = attrSyntax.Name.ToString();
-                        if (!name.EndsWith("AutoLog") &&
-                            !name.EndsWith("AutoLogAttribute"))
-                            continue;
-
-                        var args = ExtractAttributeArguments(attrSyntax);
-
-                        if (policy is null)
-                        {
-                            if (args.TryGetValue("Policy", out var p))
-                                policy = p;
-                            else if (args.TryGetValue("_arg0", out var p0))
-                                policy = p0;
-                        }
-
-                        if (span is null)
-                        {
-                            if (args.TryGetValue("Span", out var s))
-                                span = s;
-                            else if (args.TryGetValue("_arg1", out var s1))
-                                span = s1;
-                        }
-                    }
-                }
-            }
-
-            return new AutoLogAttributeData(policy, span);
-        }
-
-        return null;
-    }
-    */
-
-    /// <summary>
     /// Extracts all AutoLog attributes applied to any symbol (method, class, interface, property).
     /// Supports semantic binding, syntax fallback, inheritance, aliases, positional + named args.
     /// </summary>
@@ -477,8 +447,6 @@ public sealed class MetadataAnalyzer(Compilation compilation)
         var attrClass = attribute.AttributeClass;
         if (attrClass == null)
             return false;
-        //return attrClass.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
-        //    == "global::Sentinel.Diagnostics.Core.Attributes.AutoLogAttribute";
         return attrClass.Name == "AutoLogAttribute"
             || attrClass.BaseType?.Name == "AutoLogAttribute";
     }
@@ -488,8 +456,6 @@ public sealed class MetadataAnalyzer(Compilation compilation)
         var attrClass = attribute.AttributeClass;
         if (attrClass == null)
             return false;
-        //return attrClass.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
-        //    == "global::Sentinel.Diagnostics.Core.Attributes.SensitiveAttribute";
         return attrClass.Name == "SensitiveAttribute"
             || attrClass.BaseType?.Name == "SensitiveAttribute";
     }
@@ -552,51 +518,6 @@ public sealed class MetadataAnalyzer(Compilation compilation)
             TypeParameters: typeParameters);
     }
 
-    private static Dictionary<string, string?> ExtractAttributeArguments_old(AttributeSyntax attributeSyntax)
-    {
-        var results = new Dictionary<string, string?>(StringComparer.Ordinal);
-
-        if (attributeSyntax.ArgumentList is null)
-            return results;
-
-        int positionalIndex = 0;
-
-        foreach (var arg in attributeSyntax.ArgumentList.Arguments)
-        {
-            string name;
-            string? value;
-
-            // Named argument: Policy = "TestPolicy"
-            if (arg.NameEquals is not null)
-            {
-                name = arg.NameEquals.Name.Identifier.Text;
-            }
-            // Named argument with colon syntax: Policy: "TestPolicy"
-            else if (arg.NameColon is not null)
-            {
-                name = arg.NameColon.Name.Identifier.Text;
-            }
-            // Positional argument: "TestPolicy"
-            else
-            {
-                name = $"_arg{positionalIndex++}";
-            }
-
-            // Extract literal or expression text
-            value = arg.Expression switch
-            {
-                LiteralExpressionSyntax literal => literal.Token.ValueText,
-                IdentifierNameSyntax ident => ident.Identifier.Text,
-                MemberAccessExpressionSyntax member => member.ToString(),
-                InvocationExpressionSyntax invocation => invocation.ToString(),
-                _ => arg.Expression.ToString().Trim('"')
-            };
-
-            results[name] = value;
-        }
-
-        return results;
-    }
     private static bool AttributeNameMatches(NameSyntax name)
     {
         // Handles: AutoLog, AutoLogAttribute, AL, Sentinel.Diagnostics.Core.Attributes.AutoLogAttribute

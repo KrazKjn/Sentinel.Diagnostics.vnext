@@ -31,12 +31,24 @@ public sealed class MetadataBuilderTests
                 LogParameters = true,
                 LogDuration = true
             },
+            Attribute: new AutoLogAttributeOptions
+            {
+                Span = "M",
+                Policy = "Default",
+                Enabled = true,
+                AddUsing = true,
+                AddTryCatch = true,
+                LogParameters = true,
+                LogDuration = true
+            },
             IsAsync: false,
             IsIterator: false,
             IsStatic: false,
             IsGenericMethod: false,
             GenericTypeParameters: ImmutableArray<string>.Empty,
             HasCancellationToken: false,
+            HasSensitiveParameters: false,
+            SensitiveParameterNames: ImmutableArray<string>.Empty,
             Parameters: ImmutableArray<RawParameterMetadata>.Empty,
             MethodAccessibility: Microsoft.CodeAnalysis.Accessibility.Public,
             DeclaringTypeAccessibility: Microsoft.CodeAnalysis.Accessibility.Public);

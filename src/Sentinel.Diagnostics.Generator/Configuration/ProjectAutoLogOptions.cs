@@ -2,6 +2,7 @@
 {
     public sealed class ProjectAutoLogOptions
     {
+        public string? RawJson { get; init; }
         public bool? Enabled { get; init; }
         public bool? AddUsing { get; init; }
         public bool? AddTryCatch { get; init; }

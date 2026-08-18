@@ -2,9 +2,11 @@
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Sentinel.Diagnostics.Generator.Analysis;
 using Sentinel.Diagnostics.Generator.Builders;
+using Sentinel.Diagnostics.Generator.Configuration;
 using Sentinel.Diagnostics.Generator.Models;
 using Sentinel.Diagnostics.Generator.Validation;
 using System;
+using System.IO;
 using System.Linq;
 
 namespace Sentinel.Diagnostics.Generator;
@@ -79,17 +81,37 @@ public sealed class SentinelDiagnosticsGenerator : IIncrementalGenerator
          *
          * This class does not perform semantic analysis directly.
          */
+
+        var projectConfigProvider =
+            context.AdditionalTextsProvider
+                .Where(static file =>
+                    Path.GetFileName(file.Path)
+                        .Equals("sentinel.json", StringComparison.OrdinalIgnoreCase))
+                .Select(static (file, _) =>
+                {
+                    var text = file.GetText()?.ToString();
+
+                    return ProjectConfigurationLoader.Load(text);
+                })
+                .Collect()
+                .Select(static (configs, _) =>
+                    configs.Length > 0
+                        ? configs[0]
+                        : ProjectConfigurationLoader.Load(null))
+                .WithComparer(ProjectAutoLogOptionsComparer.Instance);
+
         IncrementalValuesProvider<RawMethodMetadata?> analyzedMethods =
             methodDeclarations
                 .Combine(context.CompilationProvider)
-                .Select(static (pair, _) =>
+                .Combine(projectConfigProvider)
+                .Select(static (triple, _) =>
                 {
-                    (MethodDeclarationSyntax methodDeclaration, Compilation compilation) = pair;
+                    ((MethodDeclarationSyntax methodDeclaration, Compilation compilation), ProjectAutoLogOptions projectOptions) = triple;
 
                     SemanticModel semanticModel =
                         compilation.GetSemanticModel(methodDeclaration.SyntaxTree);
 
-                    var analyzer = new MetadataAnalyzer(compilation);
+                    var analyzer = new MetadataAnalyzer(compilation, projectOptions);
 
                     return analyzer.Analyze(semanticModel, methodDeclaration);
                 });
@@ -115,7 +137,14 @@ public sealed class SentinelDiagnosticsGenerator : IIncrementalGenerator
          * Validation requires SourceProductionContext, so it must occur inside
          * RegisterSourceOutput.
          */
-        context.RegisterSourceOutput(validAnalyzedMethods, (spc, raw) =>
+
+        // ---------------------------------------------------------------
+        // Phase 4D — Combine validated methods with project config
+        // ---------------------------------------------------------------
+        var validatedMethodsWithConfig =
+            validAnalyzedMethods.Combine(projectConfigProvider);
+
+        context.RegisterSourceOutput(validatedMethodsWithConfig, (spc, pair) =>
         {
             /*
              * ================================================================
@@ -134,14 +163,7 @@ public sealed class SentinelDiagnosticsGenerator : IIncrementalGenerator
              *
              * Only validated metadata proceeds to Stage 4.
              */
-            //IncrementalValuesProvider<ValidatedMethodMetadata?> validatedMethods =
-            //validAnalyzedMethods.Select(static (raw, context) =>
-            //    MetadataValidator.Validate(raw, spc));
-
-            //IncrementalValuesProvider<ValidatedMethodMetadata> validValidatedMethods =
-            //    validatedMethods
-            //        .Where(static validated => validated is not null)
-            //        .Select(static (validated, _) => validated!);
+            var (raw, projectOptions) = pair;
 
             var validated = MetadataValidator.Validate(raw, spc);
             if (validated is null)
@@ -159,11 +181,17 @@ public sealed class SentinelDiagnosticsGenerator : IIncrementalGenerator
              * The resulting metadata contains all information required by the vNext
              * Instrumentation Engine for method-body rewriting.
              */
-            //IncrementalValuesProvider<SentinelMethodGenerationMetadata> methodMetadataProvider =
-            //    validValidatedMethods.Select(static (validated, _) =>
-            //        MetadataBuilder.Build(validated));
-            
-            var built = MetadataBuilder.Build(validated);
+
+            // Validate sentinel.json
+            // Phase 4D — Validate sentinel.json
+            SentinelConfigValidator.Validate(projectOptions.RawJson, spc);
+
+            // Phase 4E — compute effective AutoLog options
+            var effective = EffectiveOptionsBuilder.Build(validated, projectOptions);
+
+            // Phase 5 will consume both validated metadata + effective options
+            var built = MetadataBuilder.Build(validated, effective);
+
         });
         /*
          * ================================================================

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Sentinel.Diagnostics.Cli": {
+      "commandName": "Project",
+      "commandLineArgs": "updatecsharp C:\\Temp\\Projects\\Sentinel.Diagnostics.vnext\\SampleCode\\TestConsoleApp\\Sample_001.cs"
+    }
+  }
+}

@@ -1,0 +1,7 @@
+﻿{
+  "enabled": true,
+  "addUsing": true,
+  "addTryCatch": true,
+  "logParameters": true,
+  "logDuration": true
+}

@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Sentinel.Diagnostics.Generator.Analysis;
+using Sentinel.Diagnostics.Generator.Configuration;
 using Sentinel.Diagnostics.Generator.Metadata;
 using Sentinel.Diagnostics.Generator.Models;
 using Sentinel.Diagnostics.Generator.Tests.TestUtilities;
@@ -11,6 +12,20 @@ namespace Analysis;
 
 public sealed class MetadataAnalyzerTests
 {
+    private static ProjectAutoLogOptions CreateDefaultProjectOptions()
+    {
+        return new ProjectAutoLogOptions
+        {
+            Enabled = true,
+            AddUsing = true,
+            AddTryCatch = true,
+            LogParameters = true,
+            LogDuration = true,
+            Policy = null,
+            Span = null
+        };
+    }
+
     [Fact]
     public void Analyze_ReturnsNull_WhenAutoLogMissing()
     {
@@ -22,6 +37,7 @@ public sealed class MetadataAnalyzerTests
         ";
 
         var compilation = TestCompilationFactory.CreateCompilation(source);
+        var projectOptions = CreateDefaultProjectOptions();
         var tree = compilation.SyntaxTrees.First(t => t.GetRoot().DescendantNodes().OfType<MethodDeclarationSyntax>().Any());
         var model = compilation.GetSemanticModel(tree);
 
@@ -30,7 +46,7 @@ public sealed class MetadataAnalyzerTests
             .OfType<MethodDeclarationSyntax>()
             .Single();
 
-        var analyzer = new MetadataAnalyzer(compilation);
+        var analyzer = new MetadataAnalyzer(compilation, projectOptions);
 
         var result = analyzer.Analyze(model, method);
 
@@ -52,6 +68,7 @@ public sealed class MetadataAnalyzerTests
         ";
 
         var compilation = TestCompilationFactory.CreateCompilation(source);
+        var projectOptions = CreateDefaultProjectOptions();
         var tree = compilation.SyntaxTrees.First(t => t.GetRoot().DescendantNodes().OfType<MethodDeclarationSyntax>().Any());
         var model = compilation.GetSemanticModel(tree);
 
@@ -60,7 +77,7 @@ public sealed class MetadataAnalyzerTests
             .OfType<MethodDeclarationSyntax>()
             .Single();
 
-        var analyzer = new MetadataAnalyzer(compilation);
+        var analyzer = new MetadataAnalyzer(compilation, projectOptions);
 
         var result = analyzer.Analyze(model, method);
 
@@ -83,6 +100,7 @@ public sealed class MetadataAnalyzerTests
         ";
 
         var compilation = TestCompilationFactory.CreateCompilation(source);
+        var projectOptions = CreateDefaultProjectOptions();
         var tree = compilation.SyntaxTrees.First(t => t.GetRoot().DescendantNodes().OfType<MethodDeclarationSyntax>().Any());
         var model = compilation.GetSemanticModel(tree);
 
@@ -91,7 +109,7 @@ public sealed class MetadataAnalyzerTests
             .OfType<MethodDeclarationSyntax>()
             .Single();
 
-        var analyzer = new MetadataAnalyzer(compilation);
+        var analyzer = new MetadataAnalyzer(compilation, projectOptions);
 
         var result = analyzer.Analyze(model, method);
 
@@ -113,6 +131,7 @@ public sealed class MetadataAnalyzerTests
         ";
 
         var compilation = TestCompilationFactory.CreateCompilation(source);
+        var projectOptions = CreateDefaultProjectOptions();
         var tree = compilation.SyntaxTrees.First(t => t.GetRoot().DescendantNodes().OfType<MethodDeclarationSyntax>().Any());
         var model = compilation.GetSemanticModel(tree);
 
@@ -121,7 +140,7 @@ public sealed class MetadataAnalyzerTests
             .OfType<MethodDeclarationSyntax>()
             .Single();
 
-        var analyzer = new MetadataAnalyzer(compilation);
+        var analyzer = new MetadataAnalyzer(compilation, projectOptions);
 
         var result = analyzer.Analyze(model, method);
 
@@ -148,6 +167,7 @@ public sealed class MetadataAnalyzerTests
         ";
 
         var compilation = TestCompilationFactory.CreateCompilation(source);
+        var projectOptions = CreateDefaultProjectOptions();
         var tree = compilation.SyntaxTrees.First(t => t.GetRoot().DescendantNodes().OfType<MethodDeclarationSyntax>().Any());
         var model = compilation.GetSemanticModel(tree);
 
@@ -156,7 +176,7 @@ public sealed class MetadataAnalyzerTests
             .OfType<MethodDeclarationSyntax>()
             .Single();
 
-        var analyzer = new MetadataAnalyzer(compilation);
+        var analyzer = new MetadataAnalyzer(compilation, projectOptions);
 
         var result = analyzer.Analyze(model, method);
 
@@ -369,7 +389,8 @@ public sealed class MetadataAnalyzerTests
     private static RawMethodMetadata? AnalyzeRaw(string source)
     {
         Compilation compilation = TestCompilationFactory.CreateCompilation(source);
-        var analyzer = new MetadataAnalyzer(compilation);
+        var projectOptions = CreateDefaultProjectOptions();
+        var analyzer = new MetadataAnalyzer(compilation, projectOptions);
 
         var tree = compilation.SyntaxTrees.First(t => t.GetRoot().DescendantNodes().OfType<MethodDeclarationSyntax>().Any());
         var root = tree.GetRoot();

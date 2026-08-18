@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Sentinel.Diagnostics.Cli": {
+      "commandName": "Project",
+      "commandLineArgs": "sentinel-cli C:\\Temp\\Projects\\Sentinel.Diagnostics.vnext\\Sentinel.Diagnostics.sln"
+    }
+  }
+}

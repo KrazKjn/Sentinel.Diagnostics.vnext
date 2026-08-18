@@ -26,6 +26,7 @@ public sealed record ValidatedMethodMetadata(
 
     // Validated AutoLog configuration
     EffectiveAutoLogOptions Options,
+    AutoLogAttributeOptions Attribute,
 
     // Method characteristics
     string ReturnTypeName,
@@ -37,6 +38,10 @@ public sealed record ValidatedMethodMetadata(
 
     // Generic method information
     ImmutableArray<string> GenericTypeParameters,
+
+    // Sensitive parameter metadata (missing before)
+    bool HasSensitiveParameters,
+    ImmutableArray<string> SensitiveParameterNames,
 
     // Accessibility information.
     Accessibility MethodAccessibility,

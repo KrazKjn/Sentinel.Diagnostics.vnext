@@ -1,5 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 using Sentinel.Diagnostics.Generator.Compatibility;
+using Sentinel.Diagnostics.Generator.Configuration;
 using Sentinel.Diagnostics.Generator.Metadata;
 using Sentinel.Diagnostics.Generator.Models;
 using System.Collections.Immutable;
@@ -62,7 +63,9 @@ public sealed class MetadataBuilder
             DeclaringTypeAccessibility: rawMetadata.DeclaringTypeAccessibility);
     }
 
-    public static SentinelMethodGenerationMetadata Build(ValidatedMethodMetadata validated)
+    public static SentinelMethodGenerationMetadata Build(
+        ValidatedMethodMetadata validated,
+         EffectiveAutoLogOptions effective)
     {
         Guard.NotNull(validated, nameof(validated));
 
@@ -91,7 +94,7 @@ public sealed class MetadataBuilder
             DeclaringTypeName: validated.DeclaringTypeName,
             FullyQualifiedDeclaringTypeName: validated.FullyQualifiedDeclaringTypeName,
             ContainingTypes: validated.ContainingTypes,
-            Options: validated.Options,
+            Options: effective,
             ReturnTypeName: validated.ReturnTypeName,
             FullyQualifiedReturnTypeName: validated.FullyQualifiedReturnTypeName,
             IsAsync: validated.IsAsync,

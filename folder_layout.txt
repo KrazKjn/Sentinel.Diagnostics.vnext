@@ -1,0 +1,645 @@
+Folder PATH listing for volume System
+Volume serial number is 30F2-88C5
+C:.
+|   .gitignore
+|   folder_layout.txt
+|   README.md
+|   Sentinel.Diagnostics.sln
+|   upgrade_dotnet.ps1
+|   VNext-RESTRUCTURE-README.md
+|   
++---.github
+|       copilot-instructions.md
+|       
++---docs
+|   +---architecture
+|   |       vnext-boundary.md
+|   |       
+|   +---design
+|   \---migration
++---src
+|   +---Sentinel.Diagnostics.Cli
+|   |   |   Program.cs
+|   |   |   Sentinel.Diagnostics.Cli.csproj
+|   |   |   
+|   |   +---bin
+|   |   |   \---Debug
+|   |   |       \---net8.0
+|   |   |               Sentinel.Diagnostics.Cli.deps.json
+|   |   |               Sentinel.Diagnostics.Cli.dll
+|   |   |               Sentinel.Diagnostics.Cli.exe
+|   |   |               Sentinel.Diagnostics.Cli.pdb
+|   |   |               Sentinel.Diagnostics.Cli.runtimeconfig.json
+|   |   |               Sentinel.Diagnostics.Core.dll
+|   |   |               Sentinel.Diagnostics.Core.pdb
+|   |   |               Sentinel.Diagnostics.Instrumentation.dll
+|   |   |               Sentinel.Diagnostics.Instrumentation.pdb
+|   |   |               
+|   |   +---Commands
+|   |   +---Configuration
+|   |   +---Instrumentation
+|   |   \---obj
+|   |       |   project.assets.json
+|   |       |   project.nuget.cache
+|   |       |   Sentinel.Diagnostics.Cli.csproj.nuget.dgspec.json
+|   |       |   Sentinel.Diagnostics.Cli.csproj.nuget.g.props
+|   |       |   Sentinel.Diagnostics.Cli.csproj.nuget.g.targets
+|   |       |   
+|   |       \---Debug
+|   |           \---net8.0
+|   |               |   .NETCoreApp,Version=v8.0.AssemblyAttributes.cs
+|   |               |   apphost.exe
+|   |               |   Sentinel.0198787A.Up2Date
+|   |               |   Sentinel.Diagnostics.Cli.AssemblyInfo.cs
+|   |               |   Sentinel.Diagnostics.Cli.AssemblyInfoInputs.cache
+|   |               |   Sentinel.Diagnostics.Cli.assets.cache
+|   |               |   Sentinel.Diagnostics.Cli.csproj.AssemblyReference.cache
+|   |               |   Sentinel.Diagnostics.Cli.csproj.BuildWithSkipAnalyzers
+|   |               |   Sentinel.Diagnostics.Cli.csproj.CoreCompileInputs.cache
+|   |               |   Sentinel.Diagnostics.Cli.csproj.FileListAbsolute.txt
+|   |               |   Sentinel.Diagnostics.Cli.dll
+|   |               |   Sentinel.Diagnostics.Cli.GeneratedMSBuildEditorConfig.editorconfig
+|   |               |   Sentinel.Diagnostics.Cli.genruntimeconfig.cache
+|   |               |   Sentinel.Diagnostics.Cli.GlobalUsings.g.cs
+|   |               |   Sentinel.Diagnostics.Cli.pdb
+|   |               |   Sentinel.Diagnostics.Cli.sourcelink.json
+|   |               |   
+|   |               +---ref
+|   |               |       Sentinel.Diagnostics.Cli.dll
+|   |               |       
+|   |               \---refint
+|   |                       Sentinel.Diagnostics.Cli.dll
+|   |                       
+|   +---Sentinel.Diagnostics.Core
+|   |   |   Sentinel.Diagnostics.Core.csproj
+|   |   |   
+|   |   +---Attributes
+|   |   |       AutoLogAttribute.cs
+|   |   |       SensitiveAttribute.cs
+|   |   |       
+|   |   +---bin
+|   |   |   \---Debug
+|   |   |       \---net8.0
+|   |   |               Sentinel.Diagnostics.Core.deps.json
+|   |   |               Sentinel.Diagnostics.Core.dll
+|   |   |               Sentinel.Diagnostics.Core.pdb
+|   |   |               
+|   |   +---Configuration
+|   |   +---Diagnostics
+|   |   +---Logging
+|   |   |       SentinelAsyncLogScope.cs
+|   |   |       SentinelLogContext.cs
+|   |   |       SentinelLogger.cs
+|   |   |       SentinelLogScope.cs
+|   |   |       
+|   |   +---Metadata
+|   |   |       SentinelMethodMetadata.cs
+|   |   |       SentinelParameterMetadata.cs
+|   |   |       SentinelPolicyMetadata.cs
+|   |   |       SentinelSpanMetadata.cs
+|   |   |       
+|   |   +---obj
+|   |   |   |   project.assets.json
+|   |   |   |   project.nuget.cache
+|   |   |   |   Sentinel.Diagnostics.Core.csproj.nuget.dgspec.json
+|   |   |   |   Sentinel.Diagnostics.Core.csproj.nuget.g.props
+|   |   |   |   Sentinel.Diagnostics.Core.csproj.nuget.g.targets
+|   |   |   |   
+|   |   |   \---Debug
+|   |   |       \---net8.0
+|   |   |           |   .NETCoreApp,Version=v8.0.AssemblyAttributes.cs
+|   |   |           |   Sentinel.Diagnostics.Core.AssemblyInfo.cs
+|   |   |           |   Sentinel.Diagnostics.Core.AssemblyInfoInputs.cache
+|   |   |           |   Sentinel.Diagnostics.Core.assets.cache
+|   |   |           |   Sentinel.Diagnostics.Core.csproj.AssemblyReference.cache
+|   |   |           |   Sentinel.Diagnostics.Core.csproj.CoreCompileInputs.cache
+|   |   |           |   Sentinel.Diagnostics.Core.csproj.FileListAbsolute.txt
+|   |   |           |   Sentinel.Diagnostics.Core.dll
+|   |   |           |   Sentinel.Diagnostics.Core.GeneratedMSBuildEditorConfig.editorconfig
+|   |   |           |   Sentinel.Diagnostics.Core.pdb
+|   |   |           |   Sentinel.Diagnostics.Core.sourcelink.json
+|   |   |           |   
+|   |   |           +---ref
+|   |   |           |       Sentinel.Diagnostics.Core.dll
+|   |   |           |       
+|   |   |           \---refint
+|   |   |                   Sentinel.Diagnostics.Core.dll
+|   |   |                   
+|   |   \---Runtime
+|   +---Sentinel.Diagnostics.Generator
+|   |   |   AnalyzerReleases.Shipped.md
+|   |   |   AnalyzerReleases.Unshipped.md
+|   |   |   Sentinel.Diagnostics.Generator.csproj
+|   |   |   SentinelDiagnosticsGenerator.cs
+|   |   |   
+|   |   +---Analysis
+|   |   |       MetadataAnalyzer.cs
+|   |   |       ParameterAnalyzer.cs
+|   |   |       ProjectAnalyzer.cs
+|   |   |       TypeAnalyzer.cs
+|   |   |       
+|   |   +---bin
+|   |   |   \---Debug
+|   |   |       \---netstandard2.0
+|   |   |               Sentinel.Diagnostics.Generator.deps.json
+|   |   |               Sentinel.Diagnostics.Generator.dll
+|   |   |               Sentinel.Diagnostics.Generator.pdb
+|   |   |               
+|   |   +---Builders
+|   |   |       MetadataBuilder.cs
+|   |   |       MetadataBuilder.cs.old
+|   |   |       
+|   |   +---Compatibility
+|   |   |       Guard.cs
+|   |   |       IsExternalInit.cs
+|   |   |       
+|   |   +---Configuration
+|   |   |       AutoLogOptionResolver.cs
+|   |   |       ClassAutoLogOptions.cs
+|   |   |       ConfigurationResolver.cs
+|   |   |       MethodAutoLogOptions.cs
+|   |   |       ProjectAutoLogOptions.cs
+|   |   |       ProjectConfigurationLoader.cs
+|   |   |       TypeAutoLogOptions.cs
+|   |   |       
+|   |   +---Diagnostics
+|   |   |       DiagnosticDescriptors.cs
+|   |   |       
+|   |   +---Metadata
+|   |   |       AutoLogAttributeData.cs
+|   |   |       AutoLogOptionsOverride.cs
+|   |   |       ContainingTypeMetadata.cs
+|   |   |       ContainingTypeMetadata.cs.old
+|   |   |       EffectiveAutoLogOptions.cs
+|   |   |       RawParameterMetadata.cs.old
+|   |   |       SentinelMethodGenerationMetadata.cs
+|   |   |       SentinelMethodGenerationMetadata.cs.old
+|   |   |       SentinelParameterGenerationMetadata.cs
+|   |   |       SentinelParameterGenerationMetadata.cs.old
+|   |   |       ValidatedMethodMetadata.cs
+|   |   |       ValidatedParameterMetadata.cs
+|   |   |       
+|   |   +---Models
+|   |   |       RawMethodMetadata.cs
+|   |   |       RawParameterMetadata.cs
+|   |   |       
+|   |   +---obj
+|   |   |   |   project.assets.json
+|   |   |   |   project.nuget.cache
+|   |   |   |   Sentinel.Diagnostics.Generator.csproj.nuget.dgspec.json
+|   |   |   |   Sentinel.Diagnostics.Generator.csproj.nuget.g.props
+|   |   |   |   Sentinel.Diagnostics.Generator.csproj.nuget.g.targets
+|   |   |   |   
+|   |   |   \---Debug
+|   |   |       \---netstandard2.0
+|   |   |               .NETStandard,Version=v2.0.AssemblyAttributes.cs
+|   |   |               Sentinel.Diagnostics.Generator.AssemblyInfo.cs
+|   |   |               Sentinel.Diagnostics.Generator.AssemblyInfoInputs.cache
+|   |   |               Sentinel.Diagnostics.Generator.assets.cache
+|   |   |               Sentinel.Diagnostics.Generator.csproj.AssemblyReference.cache
+|   |   |               Sentinel.Diagnostics.Generator.csproj.BuildWithSkipAnalyzers
+|   |   |               Sentinel.Diagnostics.Generator.csproj.CoreCompileInputs.cache
+|   |   |               Sentinel.Diagnostics.Generator.csproj.FileListAbsolute.txt
+|   |   |               Sentinel.Diagnostics.Generator.dll
+|   |   |               Sentinel.Diagnostics.Generator.GeneratedMSBuildEditorConfig.editorconfig
+|   |   |               Sentinel.Diagnostics.Generator.pdb
+|   |   |               Sentinel.Diagnostics.Generator.sourcelink.json
+|   |   |               
+|   |   \---Validation
+|   |           MetadataValidator.cs
+|   |           MetadataValidator.cs.old
+|   |           
+|   +---Sentinel.Diagnostics.Instrumentation
+|   |   |   InstrumentationEngine.cs
+|   |   |   Sentinel.Diagnostics.Instrumentation.csproj
+|   |   |   
+|   |   +---bin
+|   |   |   \---Debug
+|   |   |       \---net8.0
+|   |   |               Sentinel.Diagnostics.Core.dll
+|   |   |               Sentinel.Diagnostics.Core.pdb
+|   |   |               Sentinel.Diagnostics.Instrumentation.deps.json
+|   |   |               Sentinel.Diagnostics.Instrumentation.dll
+|   |   |               Sentinel.Diagnostics.Instrumentation.pdb
+|   |   |               
+|   |   +---Configuration
+|   |   +---CSharp
+|   |   +---Diagnostics
+|   |   +---obj
+|   |   |   |   project.assets.json
+|   |   |   |   project.nuget.cache
+|   |   |   |   Sentinel.Diagnostics.Instrumentation.csproj.nuget.dgspec.json
+|   |   |   |   Sentinel.Diagnostics.Instrumentation.csproj.nuget.g.props
+|   |   |   |   Sentinel.Diagnostics.Instrumentation.csproj.nuget.g.targets
+|   |   |   |   
+|   |   |   \---Debug
+|   |   |       \---net8.0
+|   |   |           |   .NETCoreApp,Version=v8.0.AssemblyAttributes.cs
+|   |   |           |   Sentinel.11625322.Up2Date
+|   |   |           |   Sentinel.Diagnostics.Instrumentation.AssemblyInfo.cs
+|   |   |           |   Sentinel.Diagnostics.Instrumentation.AssemblyInfoInputs.cache
+|   |   |           |   Sentinel.Diagnostics.Instrumentation.assets.cache
+|   |   |           |   Sentinel.Diagnostics.Instrumentation.csproj.AssemblyReference.cache
+|   |   |           |   Sentinel.Diagnostics.Instrumentation.csproj.BuildWithSkipAnalyzers
+|   |   |           |   Sentinel.Diagnostics.Instrumentation.csproj.CoreCompileInputs.cache
+|   |   |           |   Sentinel.Diagnostics.Instrumentation.csproj.FileListAbsolute.txt
+|   |   |           |   Sentinel.Diagnostics.Instrumentation.dll
+|   |   |           |   Sentinel.Diagnostics.Instrumentation.GeneratedMSBuildEditorConfig.editorconfig
+|   |   |           |   Sentinel.Diagnostics.Instrumentation.GlobalUsings.g.cs
+|   |   |           |   Sentinel.Diagnostics.Instrumentation.pdb
+|   |   |           |   Sentinel.Diagnostics.Instrumentation.sourcelink.json
+|   |   |           |   
+|   |   |           +---ref
+|   |   |           |       Sentinel.Diagnostics.Instrumentation.dll
+|   |   |           |       
+|   |   |           \---refint
+|   |   |                   Sentinel.Diagnostics.Instrumentation.dll
+|   |   |                   
+|   |   +---Planning
+|   |   \---Rewriters
+|   +---Sentinel.Diagnostics.OTel
+|   |   |   Sentinel.Diagnostics.OTel.csproj
+|   |   |   SentinelSpan.cs
+|   |   |   
+|   |   +---bin
+|   |   |   \---Debug
+|   |   |       \---net8.0
+|   |   |               Sentinel.Diagnostics.Core.dll
+|   |   |               Sentinel.Diagnostics.Core.pdb
+|   |   |               Sentinel.Diagnostics.OTel.deps.json
+|   |   |               Sentinel.Diagnostics.OTel.dll
+|   |   |               Sentinel.Diagnostics.OTel.pdb
+|   |   |               
+|   |   +---Exporters
+|   |   +---obj
+|   |   |   |   project.assets.json
+|   |   |   |   project.nuget.cache
+|   |   |   |   Sentinel.Diagnostics.OTel.csproj.nuget.dgspec.json
+|   |   |   |   Sentinel.Diagnostics.OTel.csproj.nuget.g.props
+|   |   |   |   Sentinel.Diagnostics.OTel.csproj.nuget.g.targets
+|   |   |   |   
+|   |   |   \---Debug
+|   |   |       \---net8.0
+|   |   |           |   .NETCoreApp,Version=v8.0.AssemblyAttributes.cs
+|   |   |           |   Sentinel.50783A4D.Up2Date
+|   |   |           |   Sentinel.Diagnostics.OTel.AssemblyInfo.cs
+|   |   |           |   Sentinel.Diagnostics.OTel.AssemblyInfoInputs.cache
+|   |   |           |   Sentinel.Diagnostics.OTel.assets.cache
+|   |   |           |   Sentinel.Diagnostics.OTel.csproj.AssemblyReference.cache
+|   |   |           |   Sentinel.Diagnostics.OTel.csproj.CoreCompileInputs.cache
+|   |   |           |   Sentinel.Diagnostics.OTel.csproj.FileListAbsolute.txt
+|   |   |           |   Sentinel.Diagnostics.OTel.dll
+|   |   |           |   Sentinel.Diagnostics.OTel.GeneratedMSBuildEditorConfig.editorconfig
+|   |   |           |   Sentinel.Diagnostics.OTel.pdb
+|   |   |           |   Sentinel.Diagnostics.OTel.sourcelink.json
+|   |   |           |   
+|   |   |           +---ref
+|   |   |           |       Sentinel.Diagnostics.OTel.dll
+|   |   |           |       
+|   |   |           \---refint
+|   |   |                   Sentinel.Diagnostics.OTel.dll
+|   |   |                   
+|   |   +---Runtime
+|   |   \---Spans
+|   +---Sentinel.Diagnostics.Policies
+|   |   |   DatabasePolicies.cs
+|   |   |   Sentinel.Diagnostics.Policies.csproj
+|   |   |   SentinelPolicy.cs
+|   |   |   SentinelRetryPolicy.cs
+|   |   |   SentinelTimeoutPolicy.cs
+|   |   |   
+|   |   +---bin
+|   |   |   \---Debug
+|   |   |       \---net8.0
+|   |   |               Sentinel.Diagnostics.Core.dll
+|   |   |               Sentinel.Diagnostics.Core.pdb
+|   |   |               Sentinel.Diagnostics.Policies.deps.json
+|   |   |               Sentinel.Diagnostics.Policies.dll
+|   |   |               Sentinel.Diagnostics.Policies.pdb
+|   |   |               
+|   |   +---Metadata
+|   |   +---obj
+|   |   |   |   project.assets.json
+|   |   |   |   project.nuget.cache
+|   |   |   |   Sentinel.Diagnostics.Policies.csproj.nuget.dgspec.json
+|   |   |   |   Sentinel.Diagnostics.Policies.csproj.nuget.g.props
+|   |   |   |   Sentinel.Diagnostics.Policies.csproj.nuget.g.targets
+|   |   |   |   
+|   |   |   \---Debug
+|   |   |       \---net8.0
+|   |   |           |   .NETCoreApp,Version=v8.0.AssemblyAttributes.cs
+|   |   |           |   Sentinel.832DD1F3.Up2Date
+|   |   |           |   Sentinel.Diagnostics.Policies.AssemblyInfo.cs
+|   |   |           |   Sentinel.Diagnostics.Policies.AssemblyInfoInputs.cache
+|   |   |           |   Sentinel.Diagnostics.Policies.assets.cache
+|   |   |           |   Sentinel.Diagnostics.Policies.csproj.AssemblyReference.cache
+|   |   |           |   Sentinel.Diagnostics.Policies.csproj.CoreCompileInputs.cache
+|   |   |           |   Sentinel.Diagnostics.Policies.csproj.FileListAbsolute.txt
+|   |   |           |   Sentinel.Diagnostics.Policies.dll
+|   |   |           |   Sentinel.Diagnostics.Policies.GeneratedMSBuildEditorConfig.editorconfig
+|   |   |           |   Sentinel.Diagnostics.Policies.pdb
+|   |   |           |   Sentinel.Diagnostics.Policies.sourcelink.json
+|   |   |           |   
+|   |   |           +---ref
+|   |   |           |       Sentinel.Diagnostics.Policies.dll
+|   |   |           |       
+|   |   |           \---refint
+|   |   |                   Sentinel.Diagnostics.Policies.dll
+|   |   |                   
+|   |   \---Runtime
+|   \---Sentinel.Diagnostics.Retry
+|       |   Sentinel.Diagnostics.Retry.csproj
+|       |   SentinelRetryEngine.cs
+|       |   
+|       +---bin
+|       |   \---Debug
+|       |       \---net8.0
+|       |               Sentinel.Diagnostics.Core.dll
+|       |               Sentinel.Diagnostics.Core.pdb
+|       |               Sentinel.Diagnostics.Retry.deps.json
+|       |               Sentinel.Diagnostics.Retry.dll
+|       |               Sentinel.Diagnostics.Retry.pdb
+|       |               
+|       +---Metadata
+|       +---obj
+|       |   |   project.assets.json
+|       |   |   project.nuget.cache
+|       |   |   Sentinel.Diagnostics.Retry.csproj.nuget.dgspec.json
+|       |   |   Sentinel.Diagnostics.Retry.csproj.nuget.g.props
+|       |   |   Sentinel.Diagnostics.Retry.csproj.nuget.g.targets
+|       |   |   
+|       |   \---Debug
+|       |       \---net8.0
+|       |           |   .NETCoreApp,Version=v8.0.AssemblyAttributes.cs
+|       |           |   Sentinel.7AF8E216.Up2Date
+|       |           |   Sentinel.Diagnostics.Retry.AssemblyInfo.cs
+|       |           |   Sentinel.Diagnostics.Retry.AssemblyInfoInputs.cache
+|       |           |   Sentinel.Diagnostics.Retry.assets.cache
+|       |           |   Sentinel.Diagnostics.Retry.csproj.AssemblyReference.cache
+|       |           |   Sentinel.Diagnostics.Retry.csproj.CoreCompileInputs.cache
+|       |           |   Sentinel.Diagnostics.Retry.csproj.FileListAbsolute.txt
+|       |           |   Sentinel.Diagnostics.Retry.dll
+|       |           |   Sentinel.Diagnostics.Retry.GeneratedMSBuildEditorConfig.editorconfig
+|       |           |   Sentinel.Diagnostics.Retry.pdb
+|       |           |   Sentinel.Diagnostics.Retry.sourcelink.json
+|       |           |   
+|       |           +---ref
+|       |           |       Sentinel.Diagnostics.Retry.dll
+|       |           |       
+|       |           \---refint
+|       |                   Sentinel.Diagnostics.Retry.dll
+|       |                   
+|       \---Runtime
++---tests
+|   +---Sentinel.Diagnostics.Core.Tests
+|   +---Sentinel.Diagnostics.Generator.Tests
+|   |   |   GeneratorTests.cs
+|   |   |   MetadataTests.cs
+|   |   |   Sentinel.Diagnostics..GeneratorTests.csproj
+|   |   |   
+|   |   +---Analysis
+|   |   |       MetadataAnalyzerTests.cs
+|   |   |       
+|   |   +---bin
+|   |   |   \---Debug
+|   |   |       \---net8.0
+|   |   |           |   CoverletSourceRootsMapping_Sentinel.Diagnostics..GeneratorTests
+|   |   |           |   CoverletSourceRootsMapping_Sentinel.Diagnostics.Tests
+|   |   |           |   Microsoft.CodeAnalysis.CSharp.dll
+|   |   |           |   Microsoft.CodeAnalysis.dll
+|   |   |           |   Microsoft.TestPlatform.CommunicationUtilities.dll
+|   |   |           |   Microsoft.TestPlatform.CoreUtilities.dll
+|   |   |           |   Microsoft.TestPlatform.CrossPlatEngine.dll
+|   |   |           |   Microsoft.TestPlatform.PlatformAbstractions.dll
+|   |   |           |   Microsoft.TestPlatform.Utilities.dll
+|   |   |           |   Microsoft.VisualStudio.CodeCoverage.Shim.dll
+|   |   |           |   Microsoft.VisualStudio.TestPlatform.Common.dll
+|   |   |           |   Microsoft.VisualStudio.TestPlatform.ObjectModel.dll
+|   |   |           |   Newtonsoft.Json.dll
+|   |   |           |   NuGet.Frameworks.dll
+|   |   |           |   Sentinel.Diagnostics..GeneratorTests.deps.json
+|   |   |           |   Sentinel.Diagnostics..GeneratorTests.dll
+|   |   |           |   Sentinel.Diagnostics..GeneratorTests.pdb
+|   |   |           |   Sentinel.Diagnostics..GeneratorTests.runtimeconfig.json
+|   |   |           |   Sentinel.Diagnostics.Core.dll
+|   |   |           |   Sentinel.Diagnostics.Core.pdb
+|   |   |           |   Sentinel.Diagnostics.Generator.dll
+|   |   |           |   Sentinel.Diagnostics.Generator.pdb
+|   |   |           |   Sentinel.Diagnostics.OTel.dll
+|   |   |           |   Sentinel.Diagnostics.OTel.pdb
+|   |   |           |   Sentinel.Diagnostics.Policies.dll
+|   |   |           |   Sentinel.Diagnostics.Policies.pdb
+|   |   |           |   Sentinel.Diagnostics.Retry.dll
+|   |   |           |   Sentinel.Diagnostics.Retry.pdb
+|   |   |           |   Sentinel.Diagnostics.Tests.deps.json
+|   |   |           |   Sentinel.Diagnostics.Tests.dll
+|   |   |           |   Sentinel.Diagnostics.Tests.pdb
+|   |   |           |   Sentinel.Diagnostics.Tests.runtimeconfig.json
+|   |   |           |   testhost.dll
+|   |   |           |   testhost.exe
+|   |   |           |   xunit.abstractions.dll
+|   |   |           |   xunit.assert.dll
+|   |   |           |   xunit.core.dll
+|   |   |           |   xunit.execution.dotnet.dll
+|   |   |           |   xunit.runner.reporters.netcoreapp10.dll
+|   |   |           |   xunit.runner.utility.netcoreapp10.dll
+|   |   |           |   xunit.runner.visualstudio.dotnetcore.testadapter.dll
+|   |   |           |   
+|   |   |           +---cs
+|   |   |           |       Microsoft.CodeAnalysis.CSharp.resources.dll
+|   |   |           |       Microsoft.CodeAnalysis.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CoreUtilities.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+|   |   |           |       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+|   |   |           |       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+|   |   |           |       
+|   |   |           +---de
+|   |   |           |       Microsoft.CodeAnalysis.CSharp.resources.dll
+|   |   |           |       Microsoft.CodeAnalysis.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CoreUtilities.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+|   |   |           |       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+|   |   |           |       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+|   |   |           |       
+|   |   |           +---es
+|   |   |           |       Microsoft.CodeAnalysis.CSharp.resources.dll
+|   |   |           |       Microsoft.CodeAnalysis.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CoreUtilities.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+|   |   |           |       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+|   |   |           |       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+|   |   |           |       
+|   |   |           +---fr
+|   |   |           |       Microsoft.CodeAnalysis.CSharp.resources.dll
+|   |   |           |       Microsoft.CodeAnalysis.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CoreUtilities.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+|   |   |           |       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+|   |   |           |       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+|   |   |           |       
+|   |   |           +---it
+|   |   |           |       Microsoft.CodeAnalysis.CSharp.resources.dll
+|   |   |           |       Microsoft.CodeAnalysis.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CoreUtilities.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+|   |   |           |       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+|   |   |           |       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+|   |   |           |       
+|   |   |           +---ja
+|   |   |           |       Microsoft.CodeAnalysis.CSharp.resources.dll
+|   |   |           |       Microsoft.CodeAnalysis.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CoreUtilities.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+|   |   |           |       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+|   |   |           |       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+|   |   |           |       
+|   |   |           +---ko
+|   |   |           |       Microsoft.CodeAnalysis.CSharp.resources.dll
+|   |   |           |       Microsoft.CodeAnalysis.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CoreUtilities.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+|   |   |           |       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+|   |   |           |       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+|   |   |           |       
+|   |   |           +---pl
+|   |   |           |       Microsoft.CodeAnalysis.CSharp.resources.dll
+|   |   |           |       Microsoft.CodeAnalysis.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CoreUtilities.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+|   |   |           |       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+|   |   |           |       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+|   |   |           |       
+|   |   |           +---pt-BR
+|   |   |           |       Microsoft.CodeAnalysis.CSharp.resources.dll
+|   |   |           |       Microsoft.CodeAnalysis.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CoreUtilities.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+|   |   |           |       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+|   |   |           |       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+|   |   |           |       
+|   |   |           +---ru
+|   |   |           |       Microsoft.CodeAnalysis.CSharp.resources.dll
+|   |   |           |       Microsoft.CodeAnalysis.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CoreUtilities.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+|   |   |           |       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+|   |   |           |       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+|   |   |           |       
+|   |   |           +---tr
+|   |   |           |       Microsoft.CodeAnalysis.CSharp.resources.dll
+|   |   |           |       Microsoft.CodeAnalysis.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CoreUtilities.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+|   |   |           |       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+|   |   |           |       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+|   |   |           |       
+|   |   |           +---zh-Hans
+|   |   |           |       Microsoft.CodeAnalysis.CSharp.resources.dll
+|   |   |           |       Microsoft.CodeAnalysis.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CoreUtilities.resources.dll
+|   |   |           |       Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+|   |   |           |       Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+|   |   |           |       Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+|   |   |           |       
+|   |   |           \---zh-Hant
+|   |   |                   Microsoft.CodeAnalysis.CSharp.resources.dll
+|   |   |                   Microsoft.CodeAnalysis.resources.dll
+|   |   |                   Microsoft.TestPlatform.CommunicationUtilities.resources.dll
+|   |   |                   Microsoft.TestPlatform.CoreUtilities.resources.dll
+|   |   |                   Microsoft.TestPlatform.CrossPlatEngine.resources.dll
+|   |   |                   Microsoft.VisualStudio.TestPlatform.Common.resources.dll
+|   |   |                   Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+|   |   |                   
+|   |   +---Builders
+|   |   |       MetadataBuilderTests.cs
+|   |   |       
+|   |   +---Configuration
+|   |   |       AutoLogOptionResolverTests.cs
+|   |   |       
+|   |   +---Metadata
+|   |   |       ValidatedParameterMetadataTests.cs
+|   |   |       
+|   |   +---obj
+|   |   |   |   project.assets.json
+|   |   |   |   project.nuget.cache
+|   |   |   |   Sentinel.Diagnostics..GeneratorTests.csproj.nuget.dgspec.json
+|   |   |   |   Sentinel.Diagnostics..GeneratorTests.csproj.nuget.g.props
+|   |   |   |   Sentinel.Diagnostics..GeneratorTests.csproj.nuget.g.targets
+|   |   |   |   Sentinel.Diagnostics.Tests.csproj.nuget.dgspec.json
+|   |   |   |   Sentinel.Diagnostics.Tests.csproj.nuget.g.props
+|   |   |   |   Sentinel.Diagnostics.Tests.csproj.nuget.g.targets
+|   |   |   |   
+|   |   |   \---Debug
+|   |   |       \---net8.0
+|   |   |           |   .NETCoreApp,Version=v8.0.AssemblyAttributes.cs
+|   |   |           |   Sentinel.0459137F.Up2Date
+|   |   |           |   Sentinel.3F71FDCB.Up2Date
+|   |   |           |   Sentinel.Diagnostics..GeneratorTests.AssemblyInfo.cs
+|   |   |           |   Sentinel.Diagnostics..GeneratorTests.AssemblyInfoInputs.cache
+|   |   |           |   Sentinel.Diagnostics..GeneratorTests.assets.cache
+|   |   |           |   Sentinel.Diagnostics..GeneratorTests.csproj.AssemblyReference.cache
+|   |   |           |   Sentinel.Diagnostics..GeneratorTests.csproj.BuildWithSkipAnalyzers
+|   |   |           |   Sentinel.Diagnostics..GeneratorTests.csproj.CoreCompileInputs.cache
+|   |   |           |   Sentinel.Diagnostics..GeneratorTests.csproj.FileListAbsolute.txt
+|   |   |           |   Sentinel.Diagnostics..GeneratorTests.dll
+|   |   |           |   Sentinel.Diagnostics..GeneratorTests.GeneratedMSBuildEditorConfig.editorconfig
+|   |   |           |   Sentinel.Diagnostics..GeneratorTests.genruntimeconfig.cache
+|   |   |           |   Sentinel.Diagnostics..GeneratorTests.GlobalUsings.g.cs
+|   |   |           |   Sentinel.Diagnostics..GeneratorTests.pdb
+|   |   |           |   Sentinel.Diagnostics..GeneratorTests.sourcelink.json
+|   |   |           |   Sentinel.Diagnostics.Tests.AssemblyInfo.cs
+|   |   |           |   Sentinel.Diagnostics.Tests.AssemblyInfoInputs.cache
+|   |   |           |   Sentinel.Diagnostics.Tests.assets.cache
+|   |   |           |   Sentinel.Diagnostics.Tests.csproj.AssemblyReference.cache
+|   |   |           |   Sentinel.Diagnostics.Tests.csproj.CoreCompileInputs.cache
+|   |   |           |   Sentinel.Diagnostics.Tests.csproj.FileListAbsolute.txt
+|   |   |           |   Sentinel.Diagnostics.Tests.dll
+|   |   |           |   Sentinel.Diagnostics.Tests.GeneratedMSBuildEditorConfig.editorconfig
+|   |   |           |   Sentinel.Diagnostics.Tests.genruntimeconfig.cache
+|   |   |           |   Sentinel.Diagnostics.Tests.GlobalUsings.g.cs
+|   |   |           |   Sentinel.Diagnostics.Tests.pdb
+|   |   |           |   Sentinel.Diagnostics.Tests.sourcelink.json
+|   |   |           |   
+|   |   |           +---ref
+|   |   |           |       Sentinel.Diagnostics..GeneratorTests.dll
+|   |   |           |       Sentinel.Diagnostics.Tests.dll
+|   |   |           |       
+|   |   |           \---refint
+|   |   |                   Sentinel.Diagnostics..GeneratorTests.dll
+|   |   |                   Sentinel.Diagnostics.Tests.dll
+|   |   |                   
+|   |   +---TestUtilities
+|   |   |       AnalysisTestHelpers.cs
+|   |   |       TestCompilationFactory.cs
+|   |   |       
+|   |   \---Validation
+|   |           FakeSourceProductionContext.cs
+|   |           MetadataValidatorTestHelper.cs
+|   |           
+|   +---Sentinel.Diagnostics.Instrumentation.Tests
+|   +---Sentinel.Diagnostics.Integration.Tests
+|   \---Sentinel.Diagnostics.Runtime.Tests
+\---_archive
+    +---autocoder-reference
+    +---Emitters
+    |       DiagnosticsEmitter.cs.old
+    |       PolicyEmitter.cs.old
+    |       
+    +---pre-vnext
+    |       AutoLogSyntaxReceiver.cs.old
+    |       
+    \---wrapper-generation
+            WrapperEmitter.cs.old
+            

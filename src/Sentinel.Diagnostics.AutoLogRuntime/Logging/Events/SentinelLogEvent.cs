@@ -5,6 +5,7 @@ namespace Sentinel.Diagnostics.AutoLogRuntime.Logging;
 public sealed record SentinelLogEvent(
     SentinelLogLevel Level,
     string Message,
+    int Verbosity,
     Guid InstanceId,
     string MethodName,
     string FullName,

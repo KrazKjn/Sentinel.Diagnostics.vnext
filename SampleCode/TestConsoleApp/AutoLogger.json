@@ -1,0 +1,28 @@
+﻿{
+  "AutoLogger": {
+    "MinimumLevel": {
+      "Level": "Information",
+      "Verbosity": 1
+    },
+    "WarningThresholdMs": 250,
+
+    "NamespaceLevels": {
+      "SampleCode.TestConsoleApp.Mathematics": {
+        "Level": "Debug"
+      }
+    },
+
+    "ClassLevels": {
+      "SampleCode.TestConsoleApp.Mathematics.DivideService": {
+        "Level": "Warning"
+      }
+    },
+
+    "MethodLevels": {
+      "Divide": {
+        "Level": "Debug",
+        "Verbosity": 4
+      }
+    }
+  }
+}

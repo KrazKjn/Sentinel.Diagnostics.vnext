@@ -245,7 +245,7 @@ namespace Sentinel.Diagnostics.Cli.Workspace
         {
             if (root is null) return false;
             return root.DescendantNodes().OfType<Microsoft.CodeAnalysis.CSharp.Syntax.UsingDirectiveSyntax>()
-                .Any(u => u.GlobalKeyword.Kind() == Microsoft.CodeAnalysis.CSharp.SyntaxKind.GlobalKeyword);
+                .Any(u => u.GlobalKeyword.IsKind(Microsoft.CodeAnalysis.CSharp.SyntaxKind.GlobalKeyword));
         }
 
         public static bool IsCodeFile(Document doc)

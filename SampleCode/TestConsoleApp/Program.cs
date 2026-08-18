@@ -1,4 +1,5 @@
 ﻿using SampleCode.TestConsoleApp;
+using Sentinel.Diagnostics.AutoLogRuntime.Diagnostics;
 
 namespace TestConsoleApp
 {
@@ -6,6 +7,8 @@ namespace TestConsoleApp
     {
         static void Main(string[] args)
         {
+            AutoLoggerConfig.LoadFromFile("autologger.json");
+
             Console.WriteLine("Hello, World!");
             TestDivide(1, 0);
         }

@@ -13,6 +13,10 @@ namespace TestConsoleApp
             {
                 try
                 {
+                    logger.Debug("Dubug Message Level 1+", 1);
+                    logger.Debug("Dubug Message Level 2+", 2);
+                    logger.Debug("Dubug Message Level 3+", 3);
+                    logger.Debug("Dubug Message Level 4+", 4);
                     if (b > 0)
                     {
                         logger.Info($"Division Test! {a} / {b}");

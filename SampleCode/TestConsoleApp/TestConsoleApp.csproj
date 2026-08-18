@@ -12,4 +12,10 @@
     <ProjectReference Include="..\..\src\Sentinel.Diagnostics.Core\Sentinel.Diagnostics.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="AutoLogger.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

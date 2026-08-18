@@ -1,5 +1,8 @@
-﻿namespace Sentinel.Diagnostics.AutoLogRuntime.Logging;
+﻿using System.Text.Json.Serialization;
 
+namespace Sentinel.Diagnostics.AutoLogRuntime.Logging;
+
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum SentinelLogLevel
 {
     Trace = 0,

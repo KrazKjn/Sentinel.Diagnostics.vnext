@@ -7,7 +7,7 @@ namespace Sentinel.Diagnostics.Cli.Workspace;
 
 public sealed class SolutionInspector
 {
-    public async Task ScanAsync(Solution solution)
+    public static async Task ScanAsync(Solution solution)
     {
         Console.WriteLine("=== Detailed Solution Inspection ===");
 
@@ -24,7 +24,7 @@ public sealed class SolutionInspector
         }
     }
 
-    private void PrintProjectHeader(Microsoft.CodeAnalysis.Project project)
+    private static void PrintProjectHeader(Microsoft.CodeAnalysis.Project project)
     {
         Console.WriteLine($"Project: {project.Name}");
         Console.WriteLine($"  File: {project.FilePath}");
@@ -75,7 +75,7 @@ public sealed class SolutionInspector
         return collection.LoadProject(projectPath);
     }
 
-    private async Task PrintDocumentDetailsAsync(Microsoft.CodeAnalysis.Project project, Document document)
+    private static async Task PrintDocumentDetailsAsync(Microsoft.CodeAnalysis.Project project, Document document)
     {
         var filePath = document.FilePath ?? "(no file path)";
         var isGenerated = SentinelWorkspace.IsGenerated(document);
@@ -137,7 +137,7 @@ public sealed class SolutionInspector
     // CLASSIFICATION HELPERS
     // ----------------------------------------------------------------------
 
-    private string GetCategory(Document doc, bool isGenerated)
+    private static string GetCategory(Document doc, bool isGenerated)
     {
         if (isGenerated)
             return "Generated";
@@ -154,7 +154,7 @@ public sealed class SolutionInspector
         return "Other";
     }
 
-    private string GetEncodingName(Encoding? encoding)
+    private static string GetEncodingName(Encoding? encoding)
     {
         if (encoding == null)
             return "Unknown";
@@ -162,7 +162,7 @@ public sealed class SolutionInspector
         return encoding.EncodingName;
     }
 
-    private long GetFileSize(string filePath)
+    private static long GetFileSize(string filePath)
     {
         if (!File.Exists(filePath))
             return 0;
@@ -170,18 +170,18 @@ public sealed class SolutionInspector
         return new FileInfo(filePath).Length;
     }
 
-    private bool ContainsTopLevelStatements(SyntaxNode root)
+    private static bool ContainsTopLevelStatements(SyntaxNode root)
     {
         return root.ChildNodes().Any(n => n.RawKind == (int)Microsoft.CodeAnalysis.CSharp.SyntaxKind.GlobalStatement);
     }
 
-    private bool ContainsFileScopedNamespace(SyntaxNode root)
+    private static bool ContainsFileScopedNamespace(SyntaxNode root)
     {
         return root.DescendantNodes().Any(n =>
             n.RawKind == (int)Microsoft.CodeAnalysis.CSharp.SyntaxKind.FileScopedNamespaceDeclaration);
     }
 
-    private bool ContainsGlobalUsings(SyntaxNode root)
+    private static bool ContainsGlobalUsings(SyntaxNode root)
     {
         return root.DescendantNodes().Any(n =>
             n.RawKind == (int)Microsoft.CodeAnalysis.CSharp.SyntaxKind.GlobalStatement ||

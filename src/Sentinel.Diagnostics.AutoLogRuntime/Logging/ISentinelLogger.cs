@@ -1,4 +1,6 @@
-﻿namespace Sentinel.Diagnostics.AutoLogRuntime.Logging;
+﻿using Sentinel.Diagnostics.AutoLogRuntime.Logging.Events;
+
+namespace Sentinel.Diagnostics.AutoLogRuntime.Logging;
 
 public interface ISentinelLogger
 {

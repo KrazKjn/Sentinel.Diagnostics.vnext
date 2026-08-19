@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
+using Sentinel.Diagnostics.Core.Metadata;
 
 namespace Sentinel.Diagnostics.Cli.Rewriting;
 
@@ -73,6 +74,7 @@ public sealed class AutoLogSyntaxRewriter : CSharpSyntaxRewriter
     {
         var methodName = node.Identifier.Text;
         var fullName = $"{_currentNamespace}.{_currentClass}.{methodName}";
+        var methodType = GetMethodType(node);
 
         // Build parameters: new AutoLogParameter("a", typeof(int), a), ...
         var parameterInitializers = node.ParameterList.Parameters
@@ -131,6 +133,12 @@ public sealed class AutoLogSyntaxRewriter : CSharpSyntaxRewriter
                                 SyntaxFactory.LiteralExpression(
                                     SyntaxKind.StringLiteralExpression,
                                     SyntaxFactory.Literal(fullName))),
+
+                            // methodType
+                            SyntaxFactory.Argument(
+                                SyntaxFactory.LiteralExpression(
+                                    SyntaxKind.StringLiteralExpression,
+                                    SyntaxFactory.Literal(methodType.ToString()))),
 
                             // parameters
                             SyntaxFactory.Argument(parametersArray),
@@ -232,4 +240,28 @@ public sealed class AutoLogSyntaxRewriter : CSharpSyntaxRewriter
 
         return base.VisitCompilationUnit(updated);
     }
+
+    public static SentinelMethodType GetMethodType(SyntaxNode node)
+    {
+        return node switch
+        {
+            MethodDeclarationSyntax => SentinelMethodType.Method,
+            ConstructorDeclarationSyntax => SentinelMethodType.Constructor,
+            OperatorDeclarationSyntax => SentinelMethodType.Operator,
+            ConversionOperatorDeclarationSyntax => SentinelMethodType.Operator,
+            LocalFunctionStatementSyntax => SentinelMethodType.LocalFunction,
+            LambdaExpressionSyntax => SentinelMethodType.Lambda,
+            AnonymousMethodExpressionSyntax => SentinelMethodType.Lambda,
+
+            AccessorDeclarationSyntax accessor => accessor.Kind() switch
+            {
+                SyntaxKind.GetAccessorDeclaration => SentinelMethodType.PropertyGetter,
+                SyntaxKind.SetAccessorDeclaration => SentinelMethodType.PropertySetter,
+                _ => SentinelMethodType.Method
+            },
+
+            _ => SentinelMethodType.Method
+        };
+    }
+
 }

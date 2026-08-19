@@ -36,27 +36,28 @@ public sealed class SentinelWorkspaceV1
     // MSBUILD REGISTRATION
     // ----------------------------------------------------------------------
 
-    private void RegisterMSBuild2()
-    {
-        // IMPORTANT: Must be first executable call in Main before any Roslyn/MSBuild types are touched.
-        // You already ensured this in Program.cs, but this method keeps the logic centralized.
-        if (MSBuildLocator.IsRegistered)
-            return;
+    //TODO MJH
+    //private void RegisterMSBuild2()
+    //{
+    //    // IMPORTANT: Must be first executable call in Main before any Roslyn/MSBuild types are touched.
+    //    // You already ensured this in Program.cs, but this method keeps the logic centralized.
+    //    if (MSBuildLocator.IsRegistered)
+    //        return;
 
-        var instances = MSBuildLocator.QueryVisualStudioInstances().ToList();
+    //    var instances = MSBuildLocator.QueryVisualStudioInstances().ToList();
 
-        if (instances.Count > 0)
-        {
-            var instance = instances.First();
-            Console.WriteLine($"Using MSBuild from Visual Studio: {instance.MSBuildPath}");
-            MSBuildLocator.RegisterInstance(instance);
-            return;
-        }
-        // Fallback to explicit SDK path
-        const string sdkPath = @"C:\Program Files\dotnet\sdk\8.0.424";
-        Console.WriteLine($"Using explicit SDK MSBuild: {sdkPath}");
-        MSBuildLocator.RegisterMSBuildPath(sdkPath);
-    }
+    //    if (instances.Count > 0)
+    //    {
+    //        var instance = instances.First();
+    //        Console.WriteLine($"Using MSBuild from Visual Studio: {instance.MSBuildPath}");
+    //        MSBuildLocator.RegisterInstance(instance);
+    //        return;
+    //    }
+    //    // Fallback to explicit SDK path
+    //    const string sdkPath = @"C:\Program Files\dotnet\sdk\8.0.424";
+    //    Console.WriteLine($"Using explicit SDK MSBuild: {sdkPath}");
+    //    MSBuildLocator.RegisterMSBuildPath(sdkPath);
+    //}
 
     private void RegisterMSBuild(string? versionPattern = null)
     {
@@ -151,7 +152,7 @@ public sealed class SentinelWorkspaceV1
     // WORKSPACE DIAGNOSTICS
     // ----------------------------------------------------------------------
 
-    private void RegisterDiagnostics(MSBuildWorkspace workspace)
+    private static void RegisterDiagnostics(MSBuildWorkspace workspace)
     {
         workspace.RegisterWorkspaceFailedHandler(args =>
         {
@@ -163,7 +164,7 @@ public sealed class SentinelWorkspaceV1
     // PROJECT SUMMARY LOGGING
     // ----------------------------------------------------------------------
 
-    private void LogProjectSummary(Solution solution)
+    private static void LogProjectSummary(Solution solution)
     {
         Console.WriteLine();
         Console.WriteLine("=== Project Summary ===");

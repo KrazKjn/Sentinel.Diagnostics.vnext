@@ -1,13 +1,16 @@
+using Sentinel.Diagnostics.AutoLogRuntime.Diagnostics;
 using System;
 using System.Reflection.Emit;
 
-namespace Sentinel.Diagnostics.AutoLogRuntime.Logging;
+namespace Sentinel.Diagnostics.AutoLogRuntime.Logging.Events;
 
 public sealed record SentinelExceptionEvent(
+    AutoLoggerLevel Level,
     Guid InstanceId,
     string MethodName,
     string FullName,
     string CallPath,
+    string MemberType,
     int Depth,
     Exception Exception)
 {

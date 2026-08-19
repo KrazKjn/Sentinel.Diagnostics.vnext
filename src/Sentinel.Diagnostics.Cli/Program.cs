@@ -8,6 +8,7 @@ using Microsoft.CodeAnalysis.Text;
 using Sentinel.Diagnostics.Cli.Configuration;
 using Sentinel.Diagnostics.Cli.Rewriting;
 using Sentinel.Diagnostics.Cli.Scanning;
+using Sentinel.Diagnostics.Cli.Workspace;
 namespace Sentinel.Diagnostics.Cli;
 
 public static class Program
@@ -314,14 +315,11 @@ public static class Program
             workspace.CurrentSolution
                 .GetDocument(documentId)!;
 
-        if (document is null)
-        {
-            document =
+        document ??=
                 workspace.CurrentSolution.Projects
                     .First(p => p.Id == projectId)
                     .Documents
                     .First();
-        }
 
         var formattedDocument =
             await Formatter.FormatAsync(
@@ -374,7 +372,7 @@ public static class Program
 
         //var inspector = new Sentinel.Diagnostics.Cli.Workspace.SolutionInspector();
         //await inspector.ScanAsync(solution);
-        await workspace.ScanAsync(solution);
+        await SentinelWorkspace.ScanAsync(solution);
 
         Console.WriteLine();
         Console.WriteLine("=== Inspection Complete ===");

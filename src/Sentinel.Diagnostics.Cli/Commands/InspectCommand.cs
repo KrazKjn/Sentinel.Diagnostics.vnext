@@ -31,7 +31,7 @@ public sealed class InspectCommand
         Console.WriteLine("Solution loaded successfully.");
         Console.WriteLine();
 
-        await _inspector.ScanAsync(solution);
+        await SolutionInspector.ScanAsync(solution);
 
         Console.WriteLine();
         Console.WriteLine("=== Inspection Complete ===");

@@ -11,22 +11,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Emitters\**" />
-    <EmbeddedResource Remove="Emitters\**" />
-    <None Remove="Emitters\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Builders\MetadataBuilder.cs.old" />
-    <None Remove="Configuration\ClassAutoLogOptions.cs.old" />
-    <None Remove="Metadata\ContainingTypeMetadata.cs.old" />
-    <None Remove="Metadata\RawParameterMetadata.cs.old" />
-    <None Remove="Metadata\SentinelMethodGenerationMetadata.cs.old" />
-    <None Remove="Metadata\SentinelParameterGenerationMetadata.cs.old" />
-    <None Remove="Validation\MetadataValidator.cs.old" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.Bcl.HashCode" Version="6.0.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0" PrivateAssets="all" />
 

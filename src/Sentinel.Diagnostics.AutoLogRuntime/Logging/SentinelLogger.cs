@@ -1,20 +1,20 @@
+using Sentinel.Diagnostics.AutoLogRuntime.Logging.Events;
+using Sentinel.Diagnostics.AutoLogRuntime.Logging.Internal;
 using System;
 
 namespace Sentinel.Diagnostics.AutoLogRuntime.Logging;
 
 public static class SentinelLogger
 {
-    private static ISentinelLogger _current =
-        //NullSentinelLogger.Instance;
-        ConsoleSentinelLogger.Instance;
+    private static readonly CompositeSentinelLogger _root = new();
+    private static ISentinelLogger _current = _root;
 
     public static ISentinelLogger Current => _current;
 
     public static void Configure(ISentinelLogger logger)
     {
         ArgumentNullException.ThrowIfNull(logger);
-
-        _current = logger;
+        _root.Add(logger);
     }
 
     public static void Log(SentinelLogEvent logEvent)

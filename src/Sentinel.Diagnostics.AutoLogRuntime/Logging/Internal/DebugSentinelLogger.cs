@@ -1,42 +1,15 @@
 ﻿using System.Diagnostics;
 
-namespace Sentinel.Diagnostics.AutoLogRuntime.Logging;
+namespace Sentinel.Diagnostics.AutoLogRuntime.Logging.Internal;
 
-internal sealed class DebugSentinelLogger : ISentinelLogger
+internal sealed class DebugSentinelLogger : SentinelLoggerBase
 {
     public static readonly DebugSentinelLogger Instance = new();
 
-    private DebugSentinelLogger()
-    {
-    }
+    private DebugSentinelLogger() { }
 
-    public void Log(SentinelLogEvent logEvent)
+    protected override void Write(string message)
     {
-        Debug.WriteLine($"Log: {logEvent}");
-    }
-
-    public void LogStarted(SentinelStartEvent logEvent)
-    {
-        Debug.WriteLine($"LogStarted: {logEvent}");
-    }
-
-    public void LogCompleted(SentinelCompletionEvent logEvent)
-    {
-        Debug.WriteLine($"LogCompleted: {logEvent}");
-    }
-
-    public void LogParameter(SentinelParameterEvent logEvent)
-    {
-        Debug.WriteLine($"LogParameter: {logEvent}");
-    }
-
-    public void LogCallPath(SentinelCallPathEvent logEvent)
-    {
-        Debug.WriteLine($"LogCallPath: {logEvent}");
-    }
-
-    public void LogException(SentinelExceptionEvent logEvent)
-    {
-        Debug.WriteLine($"LogException: {logEvent.ToStringPretty()}");
+        Debug.WriteLine(message);
     }
 }

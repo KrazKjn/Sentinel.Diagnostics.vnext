@@ -31,7 +31,7 @@ namespace Sentinel.Diagnostics.Cli.Workspace
             return solution;
         }
 
-        public async Task ScanAsync(Solution solution)
+        public static async Task ScanAsync(Solution solution)
         {
             Console.WriteLine("=== Detailed Solution Inspection ===");
 
@@ -48,7 +48,7 @@ namespace Sentinel.Diagnostics.Cli.Workspace
             }
         }
 
-        private void RegisterMSBuild(string sdkVersionPattern)
+        private static void RegisterMSBuild(string sdkVersionPattern)
         {
             if (MSBuildLocator.IsRegistered)
                 return;
@@ -58,7 +58,7 @@ namespace Sentinel.Diagnostics.Cli.Workspace
                          || i.MSBuildPath.Contains("MSBuild", StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
-            if (!instances.Any())
+            if (instances.Count == 0)
                 throw new InvalidOperationException("No MSBuild instances found.");
 
             // Simple heuristic: pick first matching instance
@@ -111,7 +111,7 @@ namespace Sentinel.Diagnostics.Cli.Workspace
             Console.WriteLine($"  Documents: {project.Documents.Count()}");
         }
 
-        private async Task PrintDocumentDetailsAsync(Project project, Document document)
+        private static async Task PrintDocumentDetailsAsync(Project project, Document document)
         {
             var filePath = document.FilePath ?? "(no file path)";
             var isGenerated = IsGenerated(document);

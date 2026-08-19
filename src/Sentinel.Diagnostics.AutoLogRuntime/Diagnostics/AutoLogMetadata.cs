@@ -11,6 +11,7 @@ public sealed class AutoLogMetadata
     public AutoLogMetadata(
         string methodName,
         string fullName,
+        string memberType,
         IReadOnlyList<AutoLogParameter> parameters,
         int depth,
         Guid instanceId,
@@ -18,6 +19,7 @@ public sealed class AutoLogMetadata
     {
         MethodName = methodName;
         FullName = fullName;
+        MemberType = memberType;
         Parameters = parameters;
         Depth = depth;
         InstanceId = instanceId;
@@ -35,4 +37,6 @@ public sealed class AutoLogMetadata
     public Guid InstanceId { get; }
 
     public string CallPath { get; }
+
+    public string MemberType { get; }
 }

@@ -1,10 +1,18 @@
 ﻿{
   "AutoLogger": {
     "MinimumLevel": {
-      "Level": "Information",
-      "Verbosity": 1
+      "Level": "Debug",
+      "Verbosity": 4
     },
+    "IndentLevel": 4,
     "WarningThresholdMs": 250,
+
+    "Loggers": [
+      "Console",
+      "Debug",
+      "File:logs/sentinel.log",
+      "Json:logs/sentinel.json"
+    ],
 
     "NamespaceLevels": {
       "SampleCode.TestConsoleApp.Mathematics": {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Sentinel.Diagnostics.Generator.Metadata;
+using System.Collections.Generic;
 
 namespace Sentinel.Diagnostics.Generator.Configuration;
 

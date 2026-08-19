@@ -160,7 +160,7 @@ public sealed class MetadataAnalyzer(Compilation compilation, ProjectAutoLogOpti
             new ProjectAutoLogOptions());
 
         EffectiveAutoLogOptions options =
-            new EffectiveAutoLogOptions
+            new()
             {
                 Enabled = true,
                 AddUsing = true,
@@ -172,7 +172,7 @@ public sealed class MetadataAnalyzer(Compilation compilation, ProjectAutoLogOpti
             };
 
         AutoLogAttributeOptions attributes =
-            new AutoLogAttributeOptions
+            new()
             {
                 Policy = autoLog.Policy,
                 Span = autoLog.Span,

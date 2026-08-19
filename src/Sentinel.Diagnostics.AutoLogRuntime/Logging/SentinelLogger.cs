@@ -7,7 +7,7 @@ namespace Sentinel.Diagnostics.AutoLogRuntime.Logging;
 public static class SentinelLogger
 {
     private static readonly CompositeSentinelLogger _root = new();
-    private static ISentinelLogger _current = _root;
+    private static readonly CompositeSentinelLogger _current = _root;
 
     public static ISentinelLogger Current => _current;
 

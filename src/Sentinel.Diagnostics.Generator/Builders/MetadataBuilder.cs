@@ -1,6 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
 using Sentinel.Diagnostics.Generator.Compatibility;
-using Sentinel.Diagnostics.Generator.Configuration;
 using Sentinel.Diagnostics.Generator.Metadata;
 using Sentinel.Diagnostics.Generator.Models;
 using System.Collections.Immutable;

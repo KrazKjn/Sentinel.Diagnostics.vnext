@@ -1,5 +1,4 @@
 using Microsoft.CodeAnalysis;
-using Sentinel.Diagnostics.Generator.Configuration;
 using Sentinel.Diagnostics.Generator.Metadata;
 using System.Collections.Immutable;
 

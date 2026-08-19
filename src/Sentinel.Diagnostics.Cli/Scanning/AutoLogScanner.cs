@@ -37,8 +37,7 @@ public sealed class AutoLogScanner
 
             var root = await updatedDoc.GetSyntaxRootAsync();
 
-            if (root is null)
-                root = await document.GetSyntaxRootAsync();
+            root ??= await document.GetSyntaxRootAsync();
 
             if (root is null)
             {

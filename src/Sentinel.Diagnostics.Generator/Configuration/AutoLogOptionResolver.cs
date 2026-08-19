@@ -1,4 +1,6 @@
-﻿namespace Sentinel.Diagnostics.Generator.Configuration
+﻿using Sentinel.Diagnostics.Generator.Metadata;
+
+namespace Sentinel.Diagnostics.Generator.Configuration
 {
     public static class AutoLogOptionResolver
     {

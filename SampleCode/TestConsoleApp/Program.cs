@@ -12,7 +12,7 @@ namespace TestConsoleApp
             // First we need to load the Logger Configuration
             AutoLoggerConfig.LoadFromFile("autologger.json");
 
-            using (var logger = new AutoLogger(new AutoLogMetadata("Main", "SampleCode.Program.Main", "Method", new AutoLogParameter[] { }, AutoLoggerContext.CurrentDepth, Guid.NewGuid(), "SampleCode.Program.Main")))
+            using (var logger = new AutoLogger(new AutoLogMetadata("Main", "SampleCode.Program.Main", "Method", Array.Empty<AutoLogParameter>(), AutoLoggerContext.CurrentDepth, Guid.NewGuid(), "SampleCode.Program.Main")))
             {
                 try
                 {

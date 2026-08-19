@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sentinel.Diagnostics.AutoLogRuntime.Diagnostics;
+using System;
 using System.IO;
 
 namespace Sentinel.Diagnostics.AutoLogRuntime.Logging.Internal
@@ -18,7 +19,7 @@ namespace Sentinel.Diagnostics.AutoLogRuntime.Logging.Internal
                 Directory.CreateDirectory(dir);
         }
 
-        protected override void Write(string message)
+        protected override void Write(AutoLoggerLevel autoLoggerLevel, string message)
         {
             lock (_lock)
             {

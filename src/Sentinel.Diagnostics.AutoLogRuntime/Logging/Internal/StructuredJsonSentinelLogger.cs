@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Sentinel.Diagnostics.AutoLogRuntime.Diagnostics;
+using Sentinel.Diagnostics.AutoLogRuntime.Logging.Events;
+using System;
 using System.IO;
 using System.Text.Json;
 
@@ -18,7 +20,7 @@ namespace Sentinel.Diagnostics.AutoLogRuntime.Logging.Internal
                 Directory.CreateDirectory(dir);
         }
 
-        protected override void Write(string message)
+        protected override void Write(AutoLoggerLevel autoLoggerLevel, string message)
         {
             // message is already formatted text — but JSON logger should
             // emit structured objects instead of raw strings.

@@ -1,5 +1,4 @@
-﻿namespace Sentinel.Diagnostics.Generator.Configuration;
-
+﻿namespace Sentinel.Diagnostics.Generator.Metadata;
 
 /// <summary>
 /// Fully resolved Sentinel Diagnostics configuration for a method.

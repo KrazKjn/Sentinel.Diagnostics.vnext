@@ -5,7 +5,7 @@ namespace Sentinel.Diagnostics.AutoLogRuntime.Logging.Internal;
 
 internal sealed class CompositeSentinelLogger : ISentinelLogger
 {
-    private readonly List<ISentinelLogger> _loggers = new();
+    private readonly List<ISentinelLogger> _loggers = [];
 
     public void Add(ISentinelLogger logger)
     {

@@ -38,38 +38,38 @@ internal abstract class SentinelLoggerBase : ISentinelLogger
     public virtual void Log(SentinelLogEvent logEvent)
     {
         //Write($"Log: {logEvent}");
-        Write(FormatMessage(logEvent.Message, logEvent.InstanceId, logEvent.Level, logEvent.Depth + 1));
+        Write(logEvent.Level, FormatMessage(logEvent.Message, logEvent.InstanceId, logEvent.Level, logEvent.Depth + 1));
     }
 
     public virtual void LogStarted(SentinelStartEvent logEvent)
     {
         if (AutoLoggerConfig.IsLevel(SentinelLogLevel.Debug))
-            Write(FormatMessage($"{EventConstants.FuncStartToken}{logEvent.FullName} ({logEvent.MemberType})]", logEvent.InstanceId, logEvent.Level, logEvent.Depth));
-        Write(SentinelLoggerBase.FormatMessage($"LogStarted: {logEvent}", logEvent.InstanceId, logEvent.Level, logEvent.Depth + 1));
+            Write(logEvent.Level, FormatMessage($"{EventConstants.FuncStartToken}{logEvent.FullName} ({logEvent.MemberType})]", logEvent.InstanceId, logEvent.Level, logEvent.Depth));
+        Write(logEvent.Level, SentinelLoggerBase.FormatMessage($"LogStarted: {logEvent}", logEvent.InstanceId, logEvent.Level, logEvent.Depth + 1));
     }
 
     public virtual void LogCompleted(SentinelCompletionEvent logEvent)
     {
-        Write(SentinelLoggerBase.FormatMessage($"LogCompleted: {logEvent}", logEvent.InstanceId, logEvent.Level, logEvent.Depth + 1));
+        Write(logEvent.Level, SentinelLoggerBase.FormatMessage($"LogCompleted: {logEvent}", logEvent.InstanceId, logEvent.Level, logEvent.Depth + 1));
         if (AutoLoggerConfig.IsLevel(SentinelLogLevel.Debug))
-            Write(SentinelLoggerBase.FormatMessage(EventConstants.FuncEndToken, logEvent.InstanceId, logEvent.Level, logEvent.Depth));
+            Write(logEvent.Level, SentinelLoggerBase.FormatMessage(EventConstants.FuncEndToken, logEvent.InstanceId, logEvent.Level, logEvent.Depth));
     }
 
     public virtual void LogParameter(SentinelParameterEvent logEvent)
     {
-        Write(SentinelLoggerBase.FormatMessage($"LogParameter: {logEvent}", logEvent.InstanceId, logEvent.Level, logEvent.Depth + 1));
+        Write(logEvent.Level, SentinelLoggerBase.FormatMessage($"LogParameter: {logEvent}", logEvent.InstanceId, logEvent.Level, logEvent.Depth + 1));
     }
 
     public virtual void LogCallPath(SentinelCallPathEvent logEvent)
     {
-        Write(SentinelLoggerBase.FormatMessage($"LogCallPath: {logEvent}", logEvent.InstanceId, logEvent.Level, logEvent.Depth + 1));
+        Write(logEvent.Level, SentinelLoggerBase.FormatMessage($"LogCallPath: {logEvent}", logEvent.InstanceId, logEvent.Level, logEvent.Depth + 1));
     }
 
     public virtual void LogException(SentinelExceptionEvent logEvent)
     {
-        Write(SentinelLoggerBase.FormatMessage($"LogException: {logEvent}", logEvent.InstanceId, logEvent.Level, logEvent.Depth + 1));
+        Write(logEvent.Level, SentinelLoggerBase.FormatMessage($"LogException: {logEvent}", logEvent.InstanceId, logEvent.Level, logEvent.Depth + 1));
     }
 
     // Concrete loggers override this
-    protected abstract void Write(string message);
+    protected abstract void Write(AutoLoggerLevel autoLoggerLevel, string message);
 }

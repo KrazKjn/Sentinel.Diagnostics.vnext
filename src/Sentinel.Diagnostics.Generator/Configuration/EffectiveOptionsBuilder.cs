@@ -1,5 +1,4 @@
 ﻿using Sentinel.Diagnostics.Generator.Metadata;
-using Sentinel.Diagnostics.Generator.Models;
 
 namespace Sentinel.Diagnostics.Generator.Configuration;
 

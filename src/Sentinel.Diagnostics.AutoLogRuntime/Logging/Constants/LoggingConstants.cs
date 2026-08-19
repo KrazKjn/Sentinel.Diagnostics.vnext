@@ -10,6 +10,8 @@
         // ------------------------------------------------------------
         public const string ConsoleLoggerName = "Console";
         public const string DebugLoggerName = "Debug";
+        public const string Log4NetLoggerPrefix = "Log4Net";
+        public const string SeriLogLoggerPreFix = "SeriLog";
         public const string FileLoggerPrefix = "File:";
         public const string JsonLoggerPrefix = "Json:";
 

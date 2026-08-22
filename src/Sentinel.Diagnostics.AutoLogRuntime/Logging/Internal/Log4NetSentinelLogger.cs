@@ -1,6 +1,7 @@
 ﻿using log4net;
 using log4net.Config;
 using Sentinel.Diagnostics.AutoLogRuntime.Diagnostics;
+using Sentinel.Diagnostics.AutoLogRuntime.Logging.Events;
 using System.IO;
 
 namespace Sentinel.Diagnostics.AutoLogRuntime.Logging.Internal
@@ -21,7 +22,7 @@ namespace Sentinel.Diagnostics.AutoLogRuntime.Logging.Internal
             _log = LogManager.GetLogger(typeof(Log4NetSentinelLogger));
         }
 
-        protected override void Write(AutoLoggerLevel autoLoggerLevel, string message)
+        protected override void Write(AutoLoggerLevel autoLoggerLevel, string message, SentinelLogEvent evt)
         {
             switch (autoLoggerLevel.Level)
             {

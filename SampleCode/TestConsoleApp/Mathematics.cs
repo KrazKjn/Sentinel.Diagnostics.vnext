@@ -1,6 +1,7 @@
 ﻿using Sentinel.Diagnostics.AutoLogRuntime.Context;
 using Sentinel.Diagnostics.AutoLogRuntime.Diagnostics;
 using Sentinel.Diagnostics.Core.Attributes;
+using Sentinel.Diagnostics.Core.Runtime.Context;
 
 namespace SampleCode.TestConsoleApp
 {
@@ -9,7 +10,11 @@ namespace SampleCode.TestConsoleApp
         [AutoLog]
         public static int Add(int a, int b)
         {
-            using (var logger = new AutoLogger(new AutoLogMetadata("Add", "SampleCode.TestConsoleApp.Mathematics.Add", "Method", new AutoLogParameter[] { new AutoLogParameter("a", typeof(int), a), new AutoLogParameter("b", typeof(int), b) }, AutoLoggerContext.CurrentDepth, Guid.NewGuid(), "SampleCode.TestConsoleApp.Mathematics.Add")))
+            var parent = SentinelOperationContext.CurrentOperationId;
+            var op = Guid.NewGuid();
+            SentinelOperationContext.CurrentOperationId = op;
+
+            using (var logger = new AutoLogger(new AutoLogMetadata("Add", "SampleCode.TestConsoleApp.Mathematics.Add", "Method", new AutoLogParameter[] { new AutoLogParameter("a", typeof(int), a), new AutoLogParameter("b", typeof(int), b) }, AutoLoggerContext.CurrentDepth, Guid.NewGuid(), "SampleCode.TestConsoleApp.Mathematics.Add"), parent, op))
             {
                 try
                 {
@@ -18,7 +23,7 @@ namespace SampleCode.TestConsoleApp
                     logger.Debug("Dubug Message Level 2+", 2);
                     logger.Debug("Dubug Message Level 3+", 3);
                     logger.Debug("Dubug Message Level 4+", 4);
-                    logger.Warning($"Add Warn Test! {a} + {b}");
+                    logger.Warn($"Add Warn Test! {a} + {b}");
                     return a + b;
                 }
                 catch (Exception ex)
@@ -26,13 +31,21 @@ namespace SampleCode.TestConsoleApp
                     logger.LogException(ex);
                     throw;
                 }
+                finally
+                {
+                    SentinelOperationContext.CurrentOperationId = parent;
+                }
             }
         }
 
         [AutoLog]
         public static int Divide(int a, int b)
         {
-            using (var logger = new AutoLogger(new AutoLogMetadata("Divide", "SampleCode.TestConsoleApp.Mathematics.Divide", "Method", new AutoLogParameter[] { new AutoLogParameter("a", typeof(int), a), new AutoLogParameter("b", typeof(int), b) }, AutoLoggerContext.CurrentDepth, Guid.NewGuid(), "SampleCode.TestConsoleApp.Mathematics.Divide")))
+            var parent = SentinelOperationContext.CurrentOperationId;
+            var op = Guid.NewGuid();
+            SentinelOperationContext.CurrentOperationId = op;
+
+            using (var logger = new AutoLogger(new AutoLogMetadata("Divide", "SampleCode.TestConsoleApp.Mathematics.Divide", "Method", new AutoLogParameter[] { new AutoLogParameter("a", typeof(int), a), new AutoLogParameter("b", typeof(int), b) }, AutoLoggerContext.CurrentDepth, Guid.NewGuid(), "SampleCode.TestConsoleApp.Mathematics.Divide"), parent, op))
             {
                 try
                 {
@@ -43,7 +56,7 @@ namespace SampleCode.TestConsoleApp
                     logger.Debug("Dubug Message Level 4+", 4);
                     if (b <= 0)
                     {
-                        logger.Warning($"Division by Zero Test! {a} / {b}");
+                        logger.Warn($"Division by Zero Test! {a} / {b}");
                     }
                     return a / b;
                 }
@@ -51,6 +64,10 @@ namespace SampleCode.TestConsoleApp
                 {
                     logger.LogException(ex);
                     throw;
+                }
+                finally
+                {
+                    SentinelOperationContext.CurrentOperationId = parent;
                 }
             }
         }

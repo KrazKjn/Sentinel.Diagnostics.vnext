@@ -10,7 +10,7 @@ internal sealed class ConsoleSentinelLogger : SentinelLoggerBase
 
     private ConsoleSentinelLogger() { }
 
-    protected override void Write(AutoLoggerLevel autoLoggerLevel, string message)
+    protected override void Write(AutoLoggerLevel autoLoggerLevel, string message, SentinelLogEvent evt)
     {
         switch (autoLoggerLevel.Level)
         {

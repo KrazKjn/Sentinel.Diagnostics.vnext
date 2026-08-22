@@ -22,7 +22,7 @@
 
     "ClassLevels": {
       "SampleCode.TestConsoleApp.Mathematics.DivideService": {
-        "Level": "Warning"
+        "Level": "Warn"
       }
     },
 

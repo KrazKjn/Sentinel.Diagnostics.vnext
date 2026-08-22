@@ -11,7 +11,7 @@ internal sealed class DebugSentinelLogger : SentinelLoggerBase
 
     private DebugSentinelLogger() { }
 
-    protected override void Write(AutoLoggerLevel autoLoggerLevel, string message)
+    protected override void Write(AutoLoggerLevel autoLoggerLevel, string message, SentinelLogEvent evt)
     {
         switch (autoLoggerLevel.Level)
         {

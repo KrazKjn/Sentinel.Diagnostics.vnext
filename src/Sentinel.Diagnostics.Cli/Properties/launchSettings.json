@@ -2,7 +2,7 @@
   "profiles": {
     "Sentinel.Diagnostics.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "sentinel-cli C:\\Temp\\Projects\\Sentinel.Diagnostics.vnext\\Sentinel.Diagnostics.sln"
+      "commandLineArgs": "updatecsharp C:\\Temp\\Projects\\Sentinel.Diagnostics.vnext\\SampleCode\\TestConsoleApp\\Sample_001.cs"
     }
   }
 }

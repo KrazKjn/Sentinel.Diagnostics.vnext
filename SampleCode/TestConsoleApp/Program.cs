@@ -2,6 +2,7 @@
 using Sentinel.Diagnostics.AutoLogRuntime.Context;
 using Sentinel.Diagnostics.AutoLogRuntime.Diagnostics;
 using Sentinel.Diagnostics.AutoLogRuntime.Logging;
+using Sentinel.Diagnostics.Core.Runtime.Context;
 
 namespace TestConsoleApp
 {
@@ -11,8 +12,12 @@ namespace TestConsoleApp
         {
             // First we need to load the Logger Configuration
             AutoLoggerConfig.LoadFromFile("autologger.json");
+            
+            var parent = SentinelOperationContext.CurrentOperationId;
+            var op = Guid.NewGuid();
+            SentinelOperationContext.CurrentOperationId = op;
 
-            using (var logger = new AutoLogger(new AutoLogMetadata("Main", "SampleCode.Program.Main", "Method", Array.Empty<AutoLogParameter>(), AutoLoggerContext.CurrentDepth, Guid.NewGuid(), "SampleCode.Program.Main")))
+            using (var logger = new AutoLogger(new AutoLogMetadata("Main", "SampleCode.Program.Main", "Method", Array.Empty<AutoLogParameter>(), AutoLoggerContext.CurrentDepth, Guid.NewGuid(), "SampleCode.Program.Main"), parent, op))
             {
                 try
                 {
@@ -25,6 +30,10 @@ namespace TestConsoleApp
                     logger.LogException(ex);
                     throw;
                 }
+                finally
+                {
+                    SentinelOperationContext.CurrentOperationId = parent;
+                }
             }
         }
 
@@ -35,7 +44,7 @@ namespace TestConsoleApp
 
         static int TestDivide(int a, int b)
         {
-            return DemoService.Divide(a, b);
+            return DemoServiceA.Divide(a, b);
         }
     }
 }

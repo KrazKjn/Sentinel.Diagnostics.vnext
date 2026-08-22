@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Sentinel.Diagnostics.AutoLogRuntime.Diagnostics;
+using Sentinel.Diagnostics.AutoLogRuntime.Logging.Events;
 using Serilog;
 using Serilog.Events;
 using System.IO;
@@ -32,7 +33,7 @@ namespace Sentinel.Diagnostics.AutoLogRuntime.Logging.Internal
             }
         }
 
-        protected override void Write(AutoLoggerLevel autoLoggerLevel, string message)
+        protected override void Write(AutoLoggerLevel autoLoggerLevel, string message, SentinelLogEvent evt)
         {
             switch (autoLoggerLevel.Level)
             {

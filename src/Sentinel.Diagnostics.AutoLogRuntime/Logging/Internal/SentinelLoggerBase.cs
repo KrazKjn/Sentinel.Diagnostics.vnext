@@ -34,42 +34,137 @@ internal abstract class SentinelLoggerBase : ISentinelLogger
         return ApplyIndentation(prefix, message, level, depth);
     }
 
-    //Default implementations call the abstract Write() method
+    // ============================================================================================================
+    // Unified Log Event
+    // ============================================================================================================
+
     public virtual void Log(SentinelLogEvent logEvent)
     {
-        //Write($"Log: {logEvent}");
-        Write(logEvent.Level, FormatMessage(logEvent.Message, logEvent.InstanceId, logEvent.Level, logEvent.Depth + 1));
+        Write(
+            logEvent.Level,
+            FormatMessage(logEvent.Message, logEvent.InstanceId, logEvent.Level, logEvent.Depth + 1),
+            logEvent);
     }
 
     public virtual void LogStarted(SentinelStartEvent logEvent)
     {
+        //if (AutoLoggerConfig.IsLevel(SentinelLogLevel.Debug))
+        //    Write(logEvent.Level, FormatMessage($"{EventConstants.FuncStartToken}{logEvent.FullName} ({logEvent.MemberType})]", logEvent.InstanceId, logEvent.Level, logEvent.Depth));
+        //Write(logEvent.Level, SentinelLoggerBase.FormatMessage($"LogStarted: {logEvent}", logEvent.InstanceId, logEvent.Level, logEvent.Depth + 1));
+        var evt = SentinelLogEvent.Create(
+            logEvent.Level,
+            $"LogStarted: {logEvent}",
+            logEvent.InstanceId,
+            logEvent.MethodName,
+            logEvent.FullName,
+            logEvent.CallPath,
+            logEvent.MemberType,
+            logEvent.Depth);
+
+        Write(evt.Level, FormatMessage(evt.Message, evt.InstanceId, evt.Level, evt.Depth + 1), evt);
+
         if (AutoLoggerConfig.IsLevel(SentinelLogLevel.Debug))
-            Write(logEvent.Level, FormatMessage($"{EventConstants.FuncStartToken}{logEvent.FullName} ({logEvent.MemberType})]", logEvent.InstanceId, logEvent.Level, logEvent.Depth));
-        Write(logEvent.Level, SentinelLoggerBase.FormatMessage($"LogStarted: {logEvent}", logEvent.InstanceId, logEvent.Level, logEvent.Depth + 1));
+        {
+            var debugEvt = SentinelLogEvent.Create(
+                logEvent.Level,
+                $"{EventConstants.FuncStartToken}{logEvent.FullName} ({logEvent.MemberType})]",
+                logEvent.InstanceId,
+                logEvent.MethodName,
+                logEvent.FullName,
+                logEvent.CallPath,
+                logEvent.MemberType,
+                logEvent.Depth);
+
+            Write(debugEvt.Level, FormatMessage(debugEvt.Message, debugEvt.InstanceId, debugEvt.Level, debugEvt.Depth), debugEvt);
+        }
     }
 
     public virtual void LogCompleted(SentinelCompletionEvent logEvent)
     {
-        Write(logEvent.Level, SentinelLoggerBase.FormatMessage($"LogCompleted: {logEvent}", logEvent.InstanceId, logEvent.Level, logEvent.Depth + 1));
+        //Write(logEvent.Level, SentinelLoggerBase.FormatMessage($"LogCompleted: {logEvent}", logEvent.InstanceId, logEvent.Level, logEvent.Depth + 1));
+        //if (AutoLoggerConfig.IsLevel(SentinelLogLevel.Debug))
+        //    Write(logEvent.Level, SentinelLoggerBase.FormatMessage(EventConstants.FuncEndToken, logEvent.InstanceId, logEvent.Level, logEvent.Depth));
+        var evt = SentinelLogEvent.Create(
+            logEvent.Level,
+            $"LogCompleted: {logEvent}",
+            logEvent.InstanceId,
+            logEvent.MethodName,
+            logEvent.FullName,
+            logEvent.CallPath,
+            logEvent.MemberType,
+            logEvent.Depth,
+            logEvent.Duration);
+
+        Write(evt.Level, FormatMessage(evt.Message, evt.InstanceId, evt.Level, evt.Depth + 1), evt);
+
         if (AutoLoggerConfig.IsLevel(SentinelLogLevel.Debug))
-            Write(logEvent.Level, SentinelLoggerBase.FormatMessage(EventConstants.FuncEndToken, logEvent.InstanceId, logEvent.Level, logEvent.Depth));
+        {
+            var debugEvt = SentinelLogEvent.Create(
+                logEvent.Level,
+                EventConstants.FuncEndToken,
+                logEvent.InstanceId,
+                logEvent.MethodName,
+                logEvent.FullName,
+                logEvent.CallPath,
+                logEvent.MemberType,
+                logEvent.Depth);
+
+            Write(debugEvt.Level, FormatMessage(debugEvt.Message, debugEvt.InstanceId, debugEvt.Level, debugEvt.Depth), debugEvt);
+        }
     }
 
     public virtual void LogParameter(SentinelParameterEvent logEvent)
     {
-        Write(logEvent.Level, SentinelLoggerBase.FormatMessage($"LogParameter: {logEvent}", logEvent.InstanceId, logEvent.Level, logEvent.Depth + 1));
+        //Write(logEvent.Level, SentinelLoggerBase.FormatMessage($"LogParameter: {logEvent}", logEvent.InstanceId, logEvent.Level, logEvent.Depth + 1));
+        var evt = SentinelLogEvent.Create(
+            logEvent.Level,
+            $"LogParameter: {logEvent}",
+            logEvent.InstanceId,
+            logEvent.MethodName,
+            logEvent.FullName,
+            logEvent.CallPath,
+            logEvent.MemberType,
+            logEvent.Depth);
+
+        Write(evt.Level, FormatMessage(evt.Message, evt.InstanceId, evt.Level, evt.Depth + 1), evt);
     }
 
     public virtual void LogCallPath(SentinelCallPathEvent logEvent)
     {
-        Write(logEvent.Level, SentinelLoggerBase.FormatMessage($"LogCallPath: {logEvent}", logEvent.InstanceId, logEvent.Level, logEvent.Depth + 1));
+        //Write(logEvent.Level, SentinelLoggerBase.FormatMessage($"LogCallPath: {logEvent}", logEvent.InstanceId, logEvent.Level, logEvent.Depth + 1));
+        var evt = SentinelLogEvent.Create(
+            logEvent.Level,
+            $"LogCallPath: {logEvent}",
+            logEvent.InstanceId,
+            logEvent.MethodName,
+            logEvent.FullName,
+            logEvent.CallPath,
+            logEvent.MemberType,
+            logEvent.Depth);
+
+        Write(evt.Level, FormatMessage(evt.Message, evt.InstanceId, evt.Level, evt.Depth + 1), evt);
     }
 
     public virtual void LogException(SentinelExceptionEvent logEvent)
     {
-        Write(logEvent.Level, SentinelLoggerBase.FormatMessage($"LogException: {logEvent}", logEvent.InstanceId, logEvent.Level, logEvent.Depth + 1));
+        //Write(logEvent.Level, SentinelLoggerBase.FormatMessage($"LogException: {logEvent}", logEvent.InstanceId, logEvent.Level, logEvent.Depth + 1));
+        var evt = SentinelLogEvent.Create(
+            logEvent.Level,
+            $"LogException: {logEvent}",
+            logEvent.InstanceId,
+            logEvent.MethodName,
+            logEvent.FullName,
+            logEvent.CallPath,
+            logEvent.MemberType,
+            logEvent.Depth,
+            ex: logEvent.Exception);
+
+        Write(evt.Level, FormatMessage(evt.Message, evt.InstanceId, evt.Level, evt.Depth + 1), evt);
     }
 
+    // ============================================================================================================
     // Concrete loggers override this
-    protected abstract void Write(AutoLoggerLevel autoLoggerLevel, string message);
+    // ============================================================================================================
+
+    protected abstract void Write(AutoLoggerLevel autoLoggerLevel, string message, SentinelLogEvent evt);
 }

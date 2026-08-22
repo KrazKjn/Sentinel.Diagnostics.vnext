@@ -16,4 +16,8 @@
     <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Sentinel.Diagnostics.Core\Sentinel.Diagnostics.Core.csproj" />
+  </ItemGroup>
+
 </Project>
